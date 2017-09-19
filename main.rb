@@ -27,7 +27,7 @@ class Game_Window < Window
   def draw
     @background.draw(-1,-1,0,1,1)
     @player.draw
-    @cursor.draw(mouse_x, mouse_y, 0, 2, 2)
+    @cursor.draw(mouse_x, mouse_y, 0, 0.5, 0.5)
   end
 end
 
