@@ -4,6 +4,8 @@ require 'Player'
 require 'dungen'
 include Gosu
 
+DEBUGGING = true
+
 
 class Game_Window < Window
   def initialize
@@ -13,7 +15,7 @@ class Game_Window < Window
     @player = Player.new(self)
     @player.warp(400,300,1)
     @cursor = Image.new("cursor.png", :retro => true)
-    #@font = Font.new(self, start_screen_font, 40)
+    @font = Font.new(16, :name => "./PixelFJVerdana12pt.ttf")
   end
 
   
@@ -28,6 +30,9 @@ class Game_Window < Window
     @background.draw(-1,-1,0,1,1)
     @player.draw
     @cursor.draw(mouse_x, mouse_y, 0, 0.5, 0.5)
+    if DEBUGGING
+      @font.draw("Mouse coords: #{mouse_x}, #{mouse_y}",0,0,0)
+    end
   end
 end
 
