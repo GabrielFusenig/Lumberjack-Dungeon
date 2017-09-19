@@ -1,19 +1,15 @@
-#require 'gosu'
-#include Gosu
+# Room Dungeon generator
+# Code by Ryuya
+# version 1.0
 
 
 class Room
 	@type = 0
 	def setType(t)
-		# array of tiles
-		#@map = Array.new(h) { Array.new(w) { 0 } }
 		@type = t
 	end
 
 	def draw
-		#@map.each() { |tile|
-		#	tile.print
-		#}
 		case @type
 		when 1 # normal room
 			print("#")
@@ -49,7 +45,7 @@ class Dungeon
 		spawn = [ rng.rand(0..((@w / 2) - 1)), rng.rand(0..(@h - 1)) ]
 		
 		# try to choose a random point near the other side of the map
-		boss = [ rng.rand((@w / 2)..(@h - 1)), rng.rand(0..(@h - 1)) ]
+		boss = [ rng.rand((@w / 2)..(@w - 1)), rng.rand(0..(@h - 1)) ]
 		
 		# get manhattan distance (in rooms)
 		taxi_distance = (spawn[0] - boss[0]).abs + (spawn[1] - boss[1]).abs
@@ -127,11 +123,11 @@ class Dungeon
 	end
 end
 
-=begin
+#=begin
 d = Dungeon.new
 d.setSize(10, 10)
 #puts "press enter to generate!"
 #gets
 d.generate
 d.draw
-=end
+#=end
