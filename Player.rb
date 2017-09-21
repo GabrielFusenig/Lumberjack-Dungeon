@@ -17,14 +17,14 @@ class Player < Sprite
 #=begin
   def move_up(speed)
     if Gosu.button_down? KbW
-    @y-=speed
+    @y -=speed
     @angle = 180
     end
   end
   
   def move_down(speed)
     if Gosu.button_down? KbS
-    @y+=speed
+    @y +=speed
     @angle = 0
     end
   end
@@ -32,14 +32,14 @@ class Player < Sprite
   
   def move_left(speed)
     if Gosu.button_down? KbA
-    @x-=speed
+    @x -=speed
     @angle = 270
     end
   end
    
   def move_right(speed)
    if Gosu.button_down? KbD
-     @x+=speed
+     @x +=speed
      @angle = 90
    end
   end
