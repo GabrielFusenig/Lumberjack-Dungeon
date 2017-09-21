@@ -35,7 +35,7 @@ class Game_Window < Window
       @player.move_right(8)
     end    
         
-    if @player.y() > 30
+    if @player.y() > 11
       @player.move_up(8)
     end
     
