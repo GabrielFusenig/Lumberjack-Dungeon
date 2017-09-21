@@ -65,10 +65,10 @@ class Game_Window < Window
     @player.draw
     @cursor.draw(mouse_x, mouse_y, 0, 0.5, 0.5)
 
-    @door1.draw(755, 250, 0, 4, 4)
-    @door1.draw(-30, 250, 0, 4, 4)
-    @door2.draw(375, -20, 0, 4, 4)
-    @door2.draw(375, 565, 0, 4, 4)
+    @door1.draw(755, 250, 1, 4, 4)
+    @door1.draw(-30, 250, 1, 4, 4)
+    @door2.draw(375, -20, 1, 4, 4)
+    @door2.draw(375, 565, 1, 4, 4)
    
     if DEBUGGING
       @font.draw("Player coords: #{@player.x}, #{@player.y}", 0, 16, 0)
