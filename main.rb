@@ -15,14 +15,41 @@ class Game_Window < Window
     @player = Player.new(self)
     @player.warp(400,300,1)
     @cursor = Image.new("cursor.png", :retro => true)
-    @font = Font.new(16, :name => "./PixelFJVerdana12pt.ttf")
+    @font = Font.new(16, :name => "./wind.ttf")
+   
   end
 
   
   
   def update
-    @player.motion(8)
-    @player.move()
+   #@player.motion(8)
+   @player.move()
+   
+    
+   #checking if the player sprite is touching a wall or going through a door
+    if @player.x() > 11
+      @player.move_left(8)
+    end
+    
+    if @player.x() < 755
+      @player.move_right(8)
+    end    
+        
+    if @player.y() > 30
+      @player.move_up(8)
+    end
+    
+    if @player.y() < 555
+      @player.move_down(8)  
+    end
+
+=begin
+    if !(@player.x() >= 28 && @player.y() >= 28) 
+      @player.warp(@player.x()+10, @player.y()+10, 0)
+    elsif !( @player.x() <= 768 && @player.y() <= 568)
+      @player.warp(@player.x()-10, @player.y()-10, 0)
+    end
+=end    
     
   end
   
@@ -30,7 +57,9 @@ class Game_Window < Window
     @background.draw(-1,-1,0,1,1)
     @player.draw
     @cursor.draw(mouse_x, mouse_y, 0, 0.5, 0.5)
+   
     if DEBUGGING
+      @font.draw("Player coords: #{@player.x}, #{@player.y}", 0, 16, 0)
       @font.draw("Mouse coords: #{mouse_x}, #{mouse_y}",0,0,0)
     end
   end
