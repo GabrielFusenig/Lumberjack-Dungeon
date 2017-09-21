@@ -16,6 +16,13 @@ class Game_Window < Window
     @player.warp(400,300,1)
     @cursor = Image.new("cursor.png", :retro => true)
     @font = Font.new(16, :name => "./wind.ttf")
+    
+    @door1 = Image.new("door1.png", :retro => true)
+    @door2 = Image.new("door2.png", :retro => true)
+    
+    @dungeon = Dungeon.new
+    @dungeon.setSize(8, 8)
+    @dungeon.generate(42069)
    
   end
 
@@ -57,6 +64,11 @@ class Game_Window < Window
     @background.draw(-1,-1,0,1,1)
     @player.draw
     @cursor.draw(mouse_x, mouse_y, 0, 0.5, 0.5)
+
+    @door1.draw(755, 250, 0, 4, 4)
+    @door1.draw(-30, 250, 0, 4, 4)
+    @door2.draw(375, -20, 0, 4, 4)
+    @door2.draw(375, 565, 0, 4, 4)
    
     if DEBUGGING
       @font.draw("Player coords: #{@player.x}, #{@player.y}", 0, 16, 0)
