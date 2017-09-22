@@ -17,30 +17,30 @@ class Player < Sprite
 #=begin
   def move_up(speed)
     if Gosu.button_down? KbW
-    @y -=speed
-    @angle = 180
+      @y -=speed
+      @angle = -90
     end
   end
   
   def move_down(speed)
     if Gosu.button_down? KbS
-    @y +=speed
-    @angle = 0
+      @y +=speed
+      @angle = 90
     end
   end
   
   
   def move_left(speed)
     if Gosu.button_down? KbA
-    @x -=speed
-    @angle = 270
+      @x -=speed
+      @angle = 180
     end
   end
    
   def move_right(speed)
    if Gosu.button_down? KbD
      @x +=speed
-     @angle = 90
+     @angle = 0
    end
   end
  
@@ -51,7 +51,7 @@ class Player < Sprite
      @vel_y *= 0.75        
    end
 
-end
+
 #=end
   
 =begin 
@@ -78,7 +78,7 @@ end
       @angle = 270
     end
   end
-=end  
+ 
   
   
   
@@ -87,9 +87,10 @@ end
     @vel_y += Gosu.offset_y(@angle, acc)
   end 
   
-
+=end
   
 
   def draw
     @image.draw_rot(@x,@y,1,@angle, 0.5, 0.5, 1.5, 1.5) 
   end
+end
