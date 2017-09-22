@@ -26,28 +26,29 @@ class Game_Window < Window
    
   end
 
-  
+  @@speeed = 4
   
   def update
-   #@player.motion(8)
-   @player.move()
+   
+   #@player.move()
    
     
    #checking if the player sprite is touching a wall or going through a door
-    if @player.x() > 11
-      @player.move_left(8)
+    if @player.x() > 30
+      @player.move_left(@@speeed)
     end
     
     if @player.x() < 755
-      @player.move_right(8)
+      @player.move_right(@@speeed)
     end    
         
-    if @player.y() > 11
-      @player.move_up(8)
+    if @player.y() > 30
+      @player.move_up(@@speeed)
+      
     end
     
     if @player.y() < 555
-      @player.move_down(8)  
+      @player.move_down(@@speeed)  
     end
 
 =begin
