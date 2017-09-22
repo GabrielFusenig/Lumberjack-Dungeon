@@ -1,7 +1,8 @@
 require 'gosu'
-require 'Sprite.rb'
+require 'Sprite'
 require 'Player'
 require 'dungen'
+require 'Enemy'
 include Gosu
 
 DEBUGGING = true
@@ -12,10 +13,17 @@ class Game_Window < Window
     super 800, 600
     self.caption = "Placeholder Game Name"
     @background = Image.new("bg room.png", :retro => true)
+    
+    
     @player = Player.new(self)
     @player.warp(400,300,1)
+    
     @cursor = Image.new("cursor.png", :retro => true)
+    
     @font = Font.new(16, :name => "./wind.ttf")
+    
+    @zombie = Enemy.new(self , "./zombie.png")
+    @zombie.warp( 450,350 , 1)
     
     @door1 = Image.new("door1.png", :retro => true)
     @door2 = Image.new("door2.png", :retro => true)
@@ -65,12 +73,13 @@ class Game_Window < Window
     @background.draw(-1,-1,0,1,1)
     @player.draw
     @cursor.draw(mouse_x, mouse_y, 0, 0.5, 0.5)
-
+    @zombie.draw
+    
     @door1.draw(755, 250, 0, 4, 4)
     @door1.draw(-30, 250, 0, 4, 4)
     @door2.draw(375, -20, 0, 4, 4)
     @door2.draw(375, 565, 0, 4, 4)
-   
+    
     if DEBUGGING
       @font.draw("Player coords: #{@player.x}, #{@player.y}", 0, 16, 0)
       @font.draw("Mouse coords: #{mouse_x}, #{mouse_y}",0,0,0)
