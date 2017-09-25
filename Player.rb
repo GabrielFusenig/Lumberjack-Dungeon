@@ -2,12 +2,15 @@ require 'Gosu'
 include Gosu
 require 'Sprite.rb'
 class Player < Sprite
-  attr_accessor :x, :y, :z, :angle, :vel_x, :vel_y
+  attr_accessor :x, :y, :z, :angle, :vel_x, :vel_y, :health, :max_health
   
   def initialize(window)
     @image = Image.new("lbj.png", :retro => true)
     super(window, "lbj.png")
     @x = @y = @vel_x = @vel_y = @z = @angle = 0
+    @health = @max_health = 300
+    @oof = Sample.new("./hitsound.wav")
+    
   end
   def warp(x,y,z)
     @x, @y, @z = x, y, z
@@ -88,9 +91,16 @@ class Player < Sprite
   end 
   
 =end
-  
+  def take_damage(damage)
+      @health -= damage
+      @oof.play
+  end
+ 
+ 
 
   def draw
     @image.draw_rot(@x,@y,1,@angle, 0.5, 0.5, 1.5, 1.5) 
+    
+    draw_rect(@x - 16, @y - 25, 32.0 * (1.0 * @health/@max_health), 2, Color::GREEN)
   end
 end

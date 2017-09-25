@@ -6,7 +6,7 @@ require 'Enemy'
 include Gosu
 
 DEBUGGING = true
-
+is_dead = false
 
 class Game_Window < Window
   def initialize
@@ -14,6 +14,7 @@ class Game_Window < Window
     self.caption = "Placeholder Game Name"
     @background = Image.new("bg room.png", :retro => true)
     
+    @fucked = Sample.new("./deathsound.wav")
     
     @player = Player.new(self)
     @player.warp(400,300,1)
@@ -37,11 +38,19 @@ class Game_Window < Window
   @@speeed = 4
   
   def update
-   
+    
+    if Gosu.button_down? KB_ESCAPE
+      self.close
+    end
+       
    #@player.move()
    
+    if @player.touching?(@zombie)
+      @player.take_damage(1)
+    end
     
    #checking if the player sprite is touching a wall or going through a door
+   if @player.health > 0
     if @player.x() > 30
       @player.move_left(@@speeed)
     end
@@ -58,22 +67,29 @@ class Game_Window < Window
     if @player.y() < 555
       @player.move_down(@@speeed)  
     end
-
-=begin
-    if !(@player.x() >= 28 && @player.y() >= 28) 
-      @player.warp(@player.x()+10, @player.y()+10, 0)
-    elsif !( @player.x() <= 768 && @player.y() <= 568)
-      @player.warp(@player.x()-10, @player.y()-10, 0)
-    end
-=end    
-    
+   else
+     @player.warp(0,0,1)
+     @fucked.play
+   end
   end
+
   
+  #####################################################
+  
+    
   def draw
     @background.draw(-1,-1,0,1,1)
-    @player.draw
+   
+    if @player.health > 0
+      @player.draw
+    else
+      
+      @player.angle = 180
+      @player.z = 2
+    end
+    
     @cursor.draw(mouse_x, mouse_y, 0, 0.5, 0.5)
-<<<<<<< HEAD
+
     @zombie.draw
     
     @door1.draw(755, 250, 0, 4, 4)
@@ -81,14 +97,15 @@ class Game_Window < Window
     @door2.draw(375, -20, 0, 4, 4)
     @door2.draw(375, 565, 0, 4, 4)
     
-=======
+
 
     @door1.draw(755, 250, 1, 4, 4)
     @door1.draw(-30, 250, 1, 4, 4)
     @door2.draw(375, -20, 1, 4, 4)
     @door2.draw(375, 565, 1, 4, 4)
    
->>>>>>> 538a28fa971ca230707e4ed3e98c3b57aa52cae2
+    
+    
     if DEBUGGING
       @font.draw("Player coords: #{@player.x}, #{@player.y}", 0, 16, 0)
       @font.draw("Mouse coords: #{mouse_x}, #{mouse_y}",0,0,0)
