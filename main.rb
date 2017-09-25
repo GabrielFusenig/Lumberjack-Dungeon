@@ -73,6 +73,7 @@ class Game_Window < Window
     @background.draw(-1,-1,0,1,1)
     @player.draw
     @cursor.draw(mouse_x, mouse_y, 0, 0.5, 0.5)
+<<<<<<< HEAD
     @zombie.draw
     
     @door1.draw(755, 250, 0, 4, 4)
@@ -80,6 +81,14 @@ class Game_Window < Window
     @door2.draw(375, -20, 0, 4, 4)
     @door2.draw(375, 565, 0, 4, 4)
     
+=======
+
+    @door1.draw(755, 250, 1, 4, 4)
+    @door1.draw(-30, 250, 1, 4, 4)
+    @door2.draw(375, -20, 1, 4, 4)
+    @door2.draw(375, 565, 1, 4, 4)
+   
+>>>>>>> 538a28fa971ca230707e4ed3e98c3b57aa52cae2
     if DEBUGGING
       @font.draw("Player coords: #{@player.x}, #{@player.y}", 0, 16, 0)
       @font.draw("Mouse coords: #{mouse_x}, #{mouse_y}",0,0,0)
