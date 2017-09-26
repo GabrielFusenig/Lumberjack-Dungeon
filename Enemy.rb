@@ -5,12 +5,15 @@ require 'Player'
 
 
 class Enemy < Sprite
-  attr_accessor :x, :y, :z, :angle, :vel_x, :vel_y
+  attr_accessor :x, :y, :z, :angle, :vel_x, :vel_y, :health, :max_health
   
   def initialize(window, sprite)
     @image = Image.new(sprite, :retro => true)
     super(window, sprite)
-    @x = @y = @vel_x = @vel_y = @z = @angle = 0
+    @vel_x = @vel_y = @z = @angle = 0
+    @health = @max_health =100
+    @x = rand(50..750)
+    @y = rand(50..550)
   end
   
   def warp(x,y,z)

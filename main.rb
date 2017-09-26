@@ -23,9 +23,9 @@ class Game_Window < Window
     
     @font = Font.new(16, :name => "./wind.ttf")
     
-    #@zombies = Array.new(rand(1..5)) { Enemy.new(self , "./zombie.png") }
-    @zombie = Enemy.new(self , "./zombie.png")
-    @zombie.warp( 450,350 , 1)
+    @zombies = Array.new(rand(1..5)) { Enemy.new(self , "./zombie.png") }
+    #@zombie = Enemy.new(self , "./zombie.png")
+    #@zombie.warp( 450,350 , 1)
     
     @door1 = Image.new("door1.png", :retro => true)
     @door2 = Image.new("door2.png", :retro => true)
@@ -46,10 +46,17 @@ class Game_Window < Window
        
    #@player.move()
    
-    if @player.touching?(@zombie)
-      @player.take_damage(2)
-    end
-    
+   #if @player.touching?(@zombie)
+    #  @player.take_damage(2)
+   #end
+  unless @player.health <= 0
+    @zombies.each {|zombie|
+      zombie.attack(@player)
+      if zombie.touching?(@player)
+        @player.take_damage(1)
+      end
+    }
+  end      
    #checking if the player sprite is touching a wall or going through a door
    if @player.health > 0
     if @player.x() > 30
@@ -71,10 +78,7 @@ class Game_Window < Window
    else
      @player.warp(0,0,1)
      is_dead = true
-   end
- unless is_dead == true
-   @zombie.attack(@player)
- end   
+   end  
   end
 
   
@@ -94,7 +98,9 @@ class Game_Window < Window
     
     @cursor.draw(mouse_x, mouse_y, 0, 0.5, 0.5)
 
-    @zombie.draw
+    @zombies.each {|zombie|
+      zombie.draw
+    }
     
     @door1.draw(755, 250, 0, 4, 4)
     @door1.draw(-30, 250, 0, 4, 4)
@@ -113,8 +119,8 @@ class Game_Window < Window
     if DEBUGGING
       @font.draw("Mouse coords: #{mouse_x}, #{mouse_y}", 0, 0, 0)
       @font.draw("Player coords: #{@player.x}, #{@player.y}", 0, 16, 0)
-      @font.draw("Zombie coords: #{@zombie.x}, #{@zombie.y}", 0, 32, 0)
-      @font.draw("Zombie angle: #{@zombie.angle}, atan() = #{Math.atan((1.0 * @player.y - @zombie.y)/(@player.x - @zombie.x))}", 0, 48, 0)
+      #@font.draw("Zombie coords: #{@zombie.x}, #{@zombie.y}", 0, 32, 0)
+      #@font.draw("Zombie angle: #{@zombie.angle}, atan() = #{Math.atan((1.0 * @player.y - @zombie.y)/(@player.x - @zombie.x))}", 0, 48, 0)
     end
   end
 end
