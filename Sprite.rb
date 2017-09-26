@@ -1,20 +1,32 @@
-require 'Gosu'
+=begin SPRITE HELPER CLASS NOTES
+    Version: 2.7 9/22/17
+    Primary Author:  Mr. Lindsay
+    Other Contributors: -- 
+=end
+=begin TO-DO LIST
+    * Get rid of deprecation warnings
+    * Implement move() -- using current rotation
+    * Implement change_size()
+    * Implement touching?(a color)
+=end
 
-NO_TILING = 0
+require 'Gosu'
+#####puts Math.const_defined? "PI"
 
 # A Sprite is defined as a special type of Image.
 class Sprite < Gosu::Image
+  NO_TILING = 0   if (!Sprite.const_defined?(:NO_TILING))
   attr_accessor :x, :y  # Makes the x and y variables available
-      # to other objects.
+                        # to other objects.
 
   # Initializes a Sprite with a window and file location of the Image.
   def initialize(window, file_location)
-    super(window, file_location, true)
+    super(file_location)
     @x = 0
     @y = 0
     @is_visible = true
     @rotation = 0
-    @window = window
+#####    @window = window
   end
   
   # Moves the Sprite to the specified x,y position.
@@ -25,11 +37,11 @@ class Sprite < Gosu::Image
   end
   
   def rotate(amount)        @rotation += amount     end  # in degrees
-  def adjust_xpos(amount)     @x += amount        end
-  def adjust_ypos(amount)     @y += amount          end
-  def hide()          @is_visible = false     end
-  def show()          @is_visible = true      end
-  def visible?()        return @is_visible      end
+  def adjust_xpos(amount)   @x += amount            end
+  def adjust_ypos(amount)   @y += amount            end
+  def hide()                @is_visible = false     end
+  def show()                @is_visible = true      end
+  def visible?()            return @is_visible      end
   
   
   def draw()
@@ -69,4 +81,3 @@ class Sprite < Gosu::Image
 
 
 end
-
