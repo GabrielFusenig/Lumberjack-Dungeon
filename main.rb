@@ -7,6 +7,7 @@ include Gosu
 
 DEBUGGING = true
 is_dead = false
+@@zombie_damage = 4
 
 class Game_Window < Window
   def initialize
@@ -22,7 +23,7 @@ class Game_Window < Window
     @cursor = Image.new("cursor.png", :retro => true)
     
     @font = Font.new(16, :name => "./wind.ttf")
-    
+        
     @zombies = Array.new(rand(1..5)) { Enemy.new(self , "./zombie.png") }
     #@zombie = Enemy.new(self , "./zombie.png")
     #@zombie.warp( 450,350 , 1)
@@ -53,7 +54,7 @@ class Game_Window < Window
     @zombies.each {|zombie|
       zombie.attack(@player)
       if zombie.touching?(@player)
-        @player.take_damage(1)
+        @player.take_damage(@@zombie_damage)
       end
     }
   end      
@@ -79,6 +80,7 @@ class Game_Window < Window
      @player.warp(0,0,1)
      is_dead = true
    end  
+    
   end
 
   
@@ -122,6 +124,11 @@ class Game_Window < Window
       #@font.draw("Zombie coords: #{@zombie.x}, #{@zombie.y}", 0, 32, 0)
       #@font.draw("Zombie angle: #{@zombie.angle}, atan() = #{Math.atan((1.0 * @player.y - @zombie.y)/(@player.x - @zombie.x))}", 0, 48, 0)
     end
+    
+    if @player.health <= 0
+      @font.draw("Game Over FuckTard", 100, 300, 0, 5, 5)
+    end
+    
   end
 end
 
