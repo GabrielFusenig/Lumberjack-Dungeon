@@ -101,6 +101,14 @@ class Player < Sprite
   def draw
     @image.draw_rot(@x,@y,1,@angle, 0.5, 0.5, 1.5, 1.5) 
     
-    draw_rect(@x - 16, @y - 25, 32.0 * (1.0 * @health/@max_health), 2, Color::GREEN)
+    case @health
+    when (@max_health/4)..(@max_health/2)
+      draw_rect(@x - 16, @y - 25, 32.0 * (1.0 * @health/@max_health), 2, Color::YELLOW)
+    when 0..(@max_health/4)
+      draw_rect(@x - 16, @y - 25, 32.0 * (1.0 * @health/@max_health), 2, Color::RED)
+    else
+      draw_rect(@x - 16, @y - 25, 32.0 * (1.0 * @health/@max_health), 2, Color::GREEN)
+    end
+   
   end
 end

@@ -18,17 +18,20 @@ class Enemy < Sprite
   end
   
   
-  def draw
-    @image.draw_rot(@x,@y,1,@angle, 0.5, 0.5, 1.5, 1.5) 
-  end
-  
   def attack(player)
-    angle = Math.atan((player.x - @x)/(player.y - @y))
-    @angle = angle
-    @vel_x = 3 * Math.cos(angle)
-    @vel_y = 3 * Math.sin(angle)
+    angle = Math.atan((1.0 * player.y - @y)/(player.x - @x))
+    if player.x > @x
+      angle -= Math::PI
+    end
+    @angle = (angle * 180 / Math::PI) + 90
+    @vel_x = 2 * Math.cos(angle)
+    @vel_y = 2 * Math.sin(angle)
     @x -= @vel_x
     @y -= @vel_y
+  end
+  
+  def draw
+    @image.draw_rot(@x,@y,1,@angle, 0.5, 0.5, 1.5, 1.5) 
   end
 end
 

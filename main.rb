@@ -23,6 +23,7 @@ class Game_Window < Window
     
     @font = Font.new(16, :name => "./wind.ttf")
     
+    #@zombies = Array.new(rand(1..5)) { Enemy.new(self , "./zombie.png") }
     @zombie = Enemy.new(self , "./zombie.png")
     @zombie.warp( 450,350 , 1)
     
@@ -46,7 +47,7 @@ class Game_Window < Window
    #@player.move()
    
     if @player.touching?(@zombie)
-      @player.take_damage(5)
+      @player.take_damage(2)
     end
     
    #checking if the player sprite is touching a wall or going through a door
@@ -71,9 +72,9 @@ class Game_Window < Window
      @player.warp(0,0,1)
      is_dead = true
    end
-   
+ unless is_dead == true
    @zombie.attack(@player)
-   
+ end   
   end
 
   
@@ -110,8 +111,10 @@ class Game_Window < Window
     
     
     if DEBUGGING
+      @font.draw("Mouse coords: #{mouse_x}, #{mouse_y}", 0, 0, 0)
       @font.draw("Player coords: #{@player.x}, #{@player.y}", 0, 16, 0)
-      @font.draw("Mouse coords: #{mouse_x}, #{mouse_y}",0,0,0)
+      @font.draw("Zombie coords: #{@zombie.x}, #{@zombie.y}", 0, 32, 0)
+      @font.draw("Zombie angle: #{@zombie.angle}, atan() = #{Math.atan((1.0 * @player.y - @zombie.y)/(@player.x - @zombie.x))}", 0, 48, 0)
     end
   end
 end
