@@ -46,7 +46,7 @@ class Game_Window < Window
    #@player.move()
    
     if @player.touching?(@zombie)
-      @player.take_damage(1)
+      @player.take_damage(5)
     end
     
    #checking if the player sprite is touching a wall or going through a door
@@ -69,8 +69,11 @@ class Game_Window < Window
     end
    else
      @player.warp(0,0,1)
-     @fucked.play
+     is_dead = true
    end
+   
+   @zombie.attack(@player)
+   
   end
 
   
