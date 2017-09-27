@@ -7,7 +7,7 @@ include Gosu
 
 DEBUGGING = true
 is_dead = false
-@@zombie_damage = 4
+
 
 class Game_Window < Window
   def initialize
@@ -22,12 +22,14 @@ class Game_Window < Window
     
     @cursor = Image.new("cursor.png", :retro => true)
     
-    @font = Font.new(16, :name => "./munro.ttf", :retro => true)
+    @font = Font.new(16, :name => "./munro.ttf")
     @game_over = Font.new(64, :name => "./munro.ttf")
         
     @zombies = Array.new(rand(1..5)) { Enemy.new(self , "./zombie.png") }
     #@zombie = Enemy.new(self , "./zombie.png")
     #@zombie.warp( 450,350 , 1)
+    @zombie_damage = 4
+      
     
     @door1 = Image.new("door1.png", :retro => true)
     @door2 = Image.new("door2.png", :retro => true)
@@ -55,7 +57,7 @@ class Game_Window < Window
     @zombies.each {|zombie|
       zombie.attack(@player)
       if zombie.touching?(@player)
-        @player.take_damage(@@zombie_damage)
+        @player.take_damage(@zombie_damage)
       end
     }
   end      
