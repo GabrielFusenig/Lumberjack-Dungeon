@@ -22,7 +22,8 @@ class Game_Window < Window
     
     @cursor = Image.new("cursor.png", :retro => true)
     
-    @font = Font.new(16, :name => "./pixel.ttf", :retro => true)
+    @font = Font.new(16, :name => "./munro.ttf", :retro => true)
+    @game_over = Font.new(64, :name => "./munro.ttf")
         
     @zombies = Array.new(rand(1..5)) { Enemy.new(self , "./zombie.png") }
     #@zombie = Enemy.new(self , "./zombie.png")
@@ -126,7 +127,7 @@ class Game_Window < Window
     end
     
     if @player.health <= 0
-      @font.draw("Game Over FuckTard", 50, 300, 0, 4, 4)
+      @game_over.draw("Game Over FuckTard", 50, 250, 1, 1.5, 1.5, Color::RED)
     end
     
   end
