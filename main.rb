@@ -52,14 +52,18 @@ class Game_Window < Window
       self.close
     end
   
+=begin
     if Gosu.button_down? KB_SPACE
       @chainsaw.show
       @chainsaw.attack(@player)
     else
       @chainsaw.hide
     end
- 
-       
+=end 
+      
+    @chainsaw.attack(@player)
+    
+     
   unless @player.health <= 0
     @zombies.each {|zombie|
       @chainsaw.axe(zombie)
@@ -124,13 +128,7 @@ class Game_Window < Window
     @door1.draw(-30, 250, 0, 4, 4)
     @door2.draw(375, -20, 0, 4, 4)
     @door2.draw(375, 565, 0, 4, 4)
-    
 
-
-    @door1.draw(755, 250, 1, 4, 4)
-    @door1.draw(-30, 250, 1, 4, 4)
-    @door2.draw(375, -20, 1, 4, 4)
-    @door2.draw(375, 565, 1, 4, 4)
    
     @chainsaw.draw
     
