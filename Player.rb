@@ -1,6 +1,8 @@
 require 'Gosu'
-include Gosu
 require 'Sprite.rb'
+include Gosu
+
+
 class Player < Sprite
   attr_accessor :x, :y, :z, :angle, :vel_x, :vel_y, :health, :max_health
   
@@ -12,9 +14,10 @@ class Player < Sprite
     @oof = Sample.new("./hitsound.wav")
     
   end
+ 
   def warp(x,y,z)
-    @x, @y, @z = x, y, z
-  end
+      @x, @y, @z = x, y, z
+    end
  
   
 #=begin
@@ -97,18 +100,17 @@ class Player < Sprite
   end
  
  
-
   def draw
     @image.draw_rot(@x,@y,1,@angle, 0.5, 0.5, 1.5, 1.5) 
     
     case @health
-    when (@max_health/4)..(@max_health/2)
-      draw_rect(@x - 16, @y - 25, 32.0 * (1.0 * @health/@max_health), 2, Color::YELLOW)
-    when 0..(@max_health/4)
-      draw_rect(@x - 16, @y - 25, 32.0 * (1.0 * @health/@max_health), 2, Color::RED)
-    else
-      draw_rect(@x - 16, @y - 25, 32.0 * (1.0 * @health/@max_health), 2, Color::GREEN)
-    end
+      when (@max_health/4)..(@max_health/2)
+        draw_rect(@x - 16, @y - 25, 32.0 * (1.0 * @health/@max_health), 2, Color::YELLOW)
+      when 0..(@max_health/4)
+        draw_rect(@x - 16, @y - 25, 32.0 * (1.0 * @health/@max_health), 2, Color::RED)
+      else
+        draw_rect(@x - 16, @y - 25, 32.0 * (1.0 * @health/@max_health), 2, Color::GREEN)
+      end
    
   end
 end

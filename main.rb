@@ -3,7 +3,9 @@ require 'Sprite'
 require 'Player'
 require 'dungen'
 require 'Enemy'
+require 'Axe'
 include Gosu
+
 
 DEBUGGING = true
 is_dead = false
@@ -30,6 +32,8 @@ class Game_Window < Window
     #@zombie.warp( 450,350 , 1)
     @zombie_damage = 4
       
+    @chainsaw = Axe.new(self, "./chainsaw.png", 4)
+   
     
     @door1 = Image.new("door1.png", :retro => true)
     @door2 = Image.new("door2.png", :retro => true)
@@ -47,17 +51,24 @@ class Game_Window < Window
     if Gosu.button_down? KB_ESCAPE
       self.close
     end
+  
+    if Gosu.button_down? KB_SPACE
+      @chainsaw.show
+      @chainsaw.attack(@player)
+    else
+      @chainsaw.hide
+    end
+ 
        
-   #@player.move()
-   
-   #if @player.touching?(@zombie)
-    #  @player.take_damage(2)
-   #end
   unless @player.health <= 0
     @zombies.each {|zombie|
+      @chainsaw.axe(zombie)
       zombie.attack(@player)
       if zombie.touching?(@player)
         @player.take_damage(@zombie_damage)
+      end
+      if zombie.health <= 0
+        zombie.hide
       end
     }
   end      
@@ -84,6 +95,8 @@ class Game_Window < Window
      is_dead = true
    end  
     
+   
+   
   end
 
   
@@ -119,13 +132,16 @@ class Game_Window < Window
     @door2.draw(375, -20, 1, 4, 4)
     @door2.draw(375, 565, 1, 4, 4)
    
+    @chainsaw.draw
     
+   
     
     if DEBUGGING
       @font.draw("Mouse coords: #{mouse_x}, #{mouse_y}", 0, 0, 0)
       @font.draw("Player coords: #{@player.x}, #{@player.y}", 0, 16, 0)
-      #@font.draw("Zombie coords: #{@zombie.x}, #{@zombie.y}", 0, 32, 0)
-      #@font.draw("Zombie angle: #{@zombie.angle}, atan() = #{Math.atan((1.0 * @player.y - @zombie.y)/(@player.x - @zombie.x))}", 0, 48, 0)
+      #@font.draw("Player angle: #{@player.angle}", 0, 32, 0)
+      #@font.draw("Chain saw angle: #{@chainsaw.angle}, #{@player.angle + 90}", 0, 48, 0)
+      #@font.draw("Chainsaw pos: #{@chainsaw.x}, #{@chainsaw.y}", 0, 64, 0)
     end
     
     if @player.health <= 0
