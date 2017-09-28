@@ -62,6 +62,15 @@ class Game_Window < Window
 =end 
       
     @chainsaw.attack(@player)
+    if Gosu.button_down? KbI
+      @player.angle = 270
+    elsif Gosu.button_down? KbK
+      @player.angle = 90
+    elsif Gosu.button_down? KbJ
+      @player.angle = 180
+    elsif Gosu.button_down? KbL
+      @player.angle = 0
+    end
     
      
   unless @player.health <= 0

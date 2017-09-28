@@ -48,6 +48,7 @@ class Axe < Sprite
   #the chainsaw attack method, moves the chainsaw to different positions around the player depending on the button pressed
   def attack(player)
     if Gosu.button_down? KbI
+      
       self.show
       @angle = 0
       @x = player.x
