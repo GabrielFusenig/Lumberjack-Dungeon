@@ -4,6 +4,7 @@ require 'Player'
 require 'dungen'
 require 'Enemy'
 require 'Axe'
+require 'Health Packs'
 include Gosu
 
 
@@ -17,7 +18,7 @@ class Game_Window < Window
     self.caption = "Placeholder Game Name"
     @background = Image.new("bg room.png", :retro => true)
     
-    @fucked = Sample.new("./deathsound.wav")
+    @fucked = Sample.new("./deathsound2.wav")
     
     @player = Player.new(self)
     @player.warp(400,300,1)
@@ -26,14 +27,15 @@ class Game_Window < Window
     
     @font = Font.new(16, :name => "./munro.ttf")
     @game_over = Font.new(64, :name => "./munro.ttf")
-        
-    @zombies = Array.new(rand(1..5)) { Enemy.new(self , "./zombie.png") }
-    #@zombie = Enemy.new(self , "./zombie.png")
-    #@zombie.warp( 450,350 , 1)
+   
+    @@num_zombies = rand(1..5)
+         
+    @zombies = Array.new(@@num_zombies) { Enemy.new(self , "./zombie.png") }
     @zombie_damage = 4
       
     @chainsaw = Axe.new(self, "./chainsaw.png", 4)
    
+    @hpack = Health_packs.new(self, "./hpack.png")
     
     @door1 = Image.new("door1.png", :retro => true)
     @door2 = Image.new("door2.png", :retro => true)
@@ -42,25 +44,21 @@ class Game_Window < Window
     @dungeon.setSize(8, 8)
     @dungeon.generate(42069)
    
+    
   end
 
   @@speeed = 4
+  @@gitfucked = false
+  @@zombies_dead = 0
+  @@hpack_visible = false
   
   def update
     
     if Gosu.button_down? KB_ESCAPE
       self.close
     end
-  
-=begin
-    if Gosu.button_down? KB_SPACE
-      @chainsaw.show
-      @chainsaw.attack(@player)
-    else
-      @chainsaw.hide
-    end
-=end 
-      
+
+    #chainsaw attack getting called while also changing the player angle depending on which direction you attacked in      
     @chainsaw.attack(@player)
     if Gosu.button_down? KbI
       @player.angle = 270
@@ -82,10 +80,12 @@ class Game_Window < Window
       end
       if zombie.health <= 0
         zombie.hide
+        @@zombies_dead +=1
       end
     }
-  end      
-   #checking if the player sprite is touching a wall or going through a door
+  end        
+  
+    #checking if the player sprite is touching a wall or going through a door
    if @player.health > 0
     if @player.x() > 30
       @player.move_left(@@speeed)
@@ -106,10 +106,11 @@ class Game_Window < Window
    else
      @player.warp(0,0,1)
      is_dead = true
+     if !@@gitfucked
+       @fucked.play
+       @@gitfucked = true
+     end
    end  
-    
-   
-   
   end
 
   
@@ -124,7 +125,6 @@ class Game_Window < Window
     else
       
       @player.angle = 180
-      @player.z = 2
     end
     
     @cursor.draw(mouse_x, mouse_y, 0, 0.5, 0.5)
@@ -141,7 +141,16 @@ class Game_Window < Window
    
     @chainsaw.draw
     
-   
+    @hpack.draw
+    
+    if @@zombies_dead = @@num_zombies
+      @hpack.show
+      @hpack.x = 400
+      @hpack.y = 300
+      
+    else
+      @hpack.hide
+    end
     
     if DEBUGGING
       @font.draw("Mouse coords: #{mouse_x}, #{mouse_y}", 0, 0, 0)
@@ -152,7 +161,8 @@ class Game_Window < Window
     end
     
     if @player.health <= 0
-      @game_over.draw("Game Over FuckTard", 50, 250, 1, 1.5, 1.5, Color::RED)
+      @game_over.draw("omae wa mou", 135, 250, 1, 1.5, 1.5, Color::RED)
+      @game_over.draw("shinde iru", 205, 314, 1, 1.5, 1.5, Color::RED)
     end
     
   end

@@ -68,7 +68,7 @@ class Player < Sprite
  
  
   def draw
-    @image.draw_rot(@x,@y,1,@angle, 0.5, 0.5, 1.5, 1.5) 
+    @image.draw_rot(@x, @y, 1, @angle, 0.5, 0.5, 1.5, 1.5) 
     
     case @health
       when (@max_health/4)..(@max_health/2)
