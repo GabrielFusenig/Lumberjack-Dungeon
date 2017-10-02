@@ -28,10 +28,11 @@ class Game_Window < Window
     @font = Font.new(16, :name => "./munro.ttf")
     @game_over = Font.new(64, :name => "./munro.ttf")
    
-    @@num_zombies = rand(1..5)
+    @num_zombies = rand(1..5)
          
-    @zombies = Array.new(@@num_zombies) { Enemy.new(self , "./zombie.png") }
+    @zombies = Array.new(@num_zombies) { Enemy.new(self , "./zombie.png") }
     @zombie_damage = 4
+	  @zombies_dead = 0
       
     @chainsaw = Axe.new(self, "./chainsaw.png", 4)
    
@@ -49,13 +50,38 @@ class Game_Window < Window
 
   @@speeed = 4
   @@gitfucked = false
-  @@zombies_dead = 0
-  @@hpack_visible = false
   
   def update
     
     if Gosu.button_down? KB_ESCAPE
       self.close
+    end
+    
+    #checking if the player sprite is touching a wall or going through a door
+    if @player.health > 0
+     if @player.x() > 30
+       @player.move_left(@@speeed)
+     end
+     
+     if @player.x() < 755
+       @player.move_right(@@speeed)
+     end    
+         
+     if @player.y() > 30
+       @player.move_up(@@speeed)
+       
+     end
+     
+     if @player.y() < 555
+       @player.move_down(@@speeed)  
+     end
+    else
+      @player.warp(0,0,1)
+      is_dead = true
+      if !@@gitfucked
+        @fucked.play
+        @@gitfucked = true
+      end
     end
 
     #chainsaw attack getting called while also changing the player angle depending on which direction you attacked in      
@@ -71,46 +97,32 @@ class Game_Window < Window
     end
     
      
-  unless @player.health <= 0
-    @zombies.each {|zombie|
-      @chainsaw.axe(zombie)
-      zombie.attack(@player)
-      if zombie.touching?(@player)
-        @player.take_damage(@zombie_damage)
-      end
-      if zombie.health <= 0
-        zombie.hide
-        @@zombies_dead +=1
-      end
-    }
-  end        
-  
-    #checking if the player sprite is touching a wall or going through a door
-   if @player.health > 0
-    if @player.x() > 30
-      @player.move_left(@@speeed)
-    end
-    
-    if @player.x() < 755
-      @player.move_right(@@speeed)
-    end    
-        
-    if @player.y() > 30
-      @player.move_up(@@speeed)
-      
-    end
-    
-    if @player.y() < 555
-      @player.move_down(@@speeed)  
-    end
-   else
-     @player.warp(0,0,1)
-     is_dead = true
-     if !@@gitfucked
-       @fucked.play
-       @@gitfucked = true
-     end
-   end  
+	  unless @player.health <= 0
+	    @zombies.each {|zombie|
+	      @chainsaw.axe(zombie)
+	      zombie.attack(@player)
+	      if zombie.touching?(@player)
+	        @player.take_damage(@zombie_damage)
+	      end
+	      
+	      if zombie.health <= 0
+	        if zombie.is_visible
+		        @zombies_dead +=1
+		        end
+	        zombie.hide
+	      end
+	    }
+	  end
+
+	  # check to see if all zombies are dead, and if they are, spawn a health pack
+	  if (@zombies_dead >= @num_zombies)
+	  	@hpack.x = 400
+	  	@hpack.y = 300
+	  	@hpack.show
+	  	@zombies_dead = 0
+	  end
+	  
+	  @hpack.use(@player)
   end
 
   
@@ -142,15 +154,6 @@ class Game_Window < Window
     @chainsaw.draw
     
     @hpack.draw
-    
-    if @@zombies_dead = @@num_zombies
-      @hpack.show
-      @hpack.x = 400
-      @hpack.y = 300
-      
-    else
-      @hpack.hide
-    end
     
     if DEBUGGING
       @font.draw("Mouse coords: #{mouse_x}, #{mouse_y}", 0, 0, 0)
