@@ -4,7 +4,12 @@
 
 
 class Room
-	@type = 0
+	attr_accessor :type
+	
+	def initialize
+		@type = 0
+	end
+	
 	def setType(t)
 		@type = t
 	end
@@ -26,6 +31,7 @@ class Room
 end
 
 class Dungeon
+	attr_accessor :spawn, :boss, :map, :explored
 	@spawn = [ 0, 0 ]
 	@boss = [ 0, 0 ]
 	
@@ -79,6 +85,7 @@ class Dungeon
 	def setSize(w, h)
 		# array of rooms
 		@map = Array.new(h) { Array.new(w) { Room.new } }
+		@explored = Array.new(h) { Array.new(w) { Room.new } }
 		@w = w
 		@h = h
 	end
@@ -142,8 +149,21 @@ class Dungeon
 
 	end
 	
+	def update(x, y)
+		@explored[y][x] = @map[y][x]
+	end
+	
 	def draw
 		@map.each() { |row|
+			row.each() { |room|
+				room.draw
+			}
+			puts
+		}
+	end
+	
+	def draw_explored
+		@explored.each() { |row|
 			row.each() { |room|
 				room.draw
 			}

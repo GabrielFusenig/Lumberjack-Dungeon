@@ -26,10 +26,12 @@ class Enemy < Sprite
   
   
   def attack(player)
-    angle = Math.atan((1.0 * player.y - @y)/(player.x - @x))
+    angle = Math.atan((1.0 * player.y - @y) / (player.x - @x))
+    
     if player.x > @x
       angle -= Math::PI
     end
+    
     @angle = (angle * 180 / Math::PI) + 90
     @vel_x = 2 * Math.cos(angle)
     @vel_y = 2 * Math.sin(angle)

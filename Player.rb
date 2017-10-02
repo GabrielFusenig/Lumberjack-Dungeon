@@ -4,7 +4,7 @@ include Gosu
 
 
 class Player < Sprite
-  attr_accessor :x, :y, :z, :angle, :vel_x, :vel_y, :health, :max_health
+  attr_accessor :x, :y, :z, :angle, :vel_x, :vel_y, :health, :max_health, :roomx, :roomy
   
   def initialize(window)
     @image = Image.new("lbj.png", :retro => true)
@@ -12,7 +12,7 @@ class Player < Sprite
     @x = @y = @vel_x = @vel_y = @z = @angle = 0
     @health = @max_health = 300
     @oof = Sample.new("./hitsound.wav")
-    
+    @roomx = @roomy = 0
   end
  
   def warp(x,y,z)

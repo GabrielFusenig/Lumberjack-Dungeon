@@ -43,9 +43,12 @@ class Game_Window < Window
     
     @dungeon = Dungeon.new
     @dungeon.setSize(8, 8)
-    @dungeon.generate(42069)
-   
+    @dungeon.generate(23059)
+    @dungeon.draw
     
+    @player.roomx = @dungeon.spawn[0]
+    @player.roomy = @dungeon.spawn[1]
+    @dungeon.update(@player.roomx, @player.roomy)
   end
 
   @@speeed = 4
@@ -59,24 +62,24 @@ class Game_Window < Window
     
     #checking if the player sprite is touching a wall or going through a door
     if @player.health > 0
-     if @player.x() > 30
+     if @player.x > 30
        @player.move_left(@@speeed)
      end
      
-     if @player.x() < 755
+     if @player.x < 765
        @player.move_right(@@speeed)
      end    
          
-     if @player.y() > 30
+     if @player.y > 30
        @player.move_up(@@speeed)
        
      end
      
-     if @player.y() < 555
+     if @player.y < 565
        @player.move_down(@@speeed)  
      end
     else
-      @player.warp(0,0,1)
+      @player.warp(0, 0, 0)
       is_dead = true
       if !@@gitfucked
         @fucked.play
@@ -84,7 +87,7 @@ class Game_Window < Window
       end
     end
 
-    #chainsaw attack getting called while also changing the player angle depending on which direction you attacked in      
+    # chainsaw attack getting called while also changing the player angle depending on which direction you attacked in      
     @chainsaw.attack(@player)
     if Gosu.button_down? KbI
       @player.angle = 270
@@ -123,6 +126,65 @@ class Game_Window < Window
 	  end
 	  
 	  @hpack.use(@player)
+	  
+	  # check to see if player has gone through a door
+	  if @player.x <= 30 and @player.y >= 270 and @player.y <= 295
+	  	# going to the left
+	  	# if player is on leftmost room or the room to the left is empty
+	  	if @player.roomx == 0 or @dungeon.map[@player.roomy][@player.roomx - 1].type == 0
+	  		# do nothing
+	  	else
+	  		# move one room to the left and update explored map
+	  		@player.x = 755
+	  		@player.roomx -= 1
+	  		
+	  		@dungeon.update(@player.roomx, @player.roomy)
+	  	end
+	  end
+	  
+	  if @player.x >= 765 and @player.y >= 270 and @player.y <= 295
+	  	# going to the right
+	  	# if player is on rightmost room or the room to the right is empty
+	  	if @player.roomx == @dungeon.map[0].size - 1 or @dungeon.map[@player.roomy][@player.roomx + 1].type == 0
+	  		# do nothing
+	  	else
+	  		# move one room to the right and update explored map
+	  		@player.x = 40
+	  		@player.roomx += 1
+
+	  		@dungeon.update(@player.roomx, @player.roomy)
+	  	end
+	  end
+
+	  if @player.y <= 30 and @player.x >= 395 and @player.x <= 420
+	  	# going up
+	  	# if player is on uppermost room or the room directly up is empty
+	  	if @player.roomy == 0 or @dungeon.map[@player.roomy - 1][@player.roomx].type == 0
+	  		# do nothing
+	  	else
+	  		# move one room up and update explored map
+	  		@player.y = 555
+	  		@player.roomy -= 1
+	  		
+	  		@dungeon.update(@player.roomx, @player.roomy)
+	  	end
+	  end
+	  
+	  if @player.y >= 565 and @player.x >= 395 and @player.x <= 420
+	  	# going down
+	  	# if player is on lowest room or the room down is empty
+	  	if @player.roomy == @dungeon.map.size - 1 or @dungeon.map[@player.roomy + 1][@player.roomx].type == 0
+	  		# do nothing
+	  	else
+	  		# move one room to the right and update explored map
+	  		@player.y = 40
+	  		@player.roomy += 1
+
+	  		@dungeon.update(@player.roomx, @player.roomy)
+	  	end
+	  end
+	  
+	  
   end
 
   
@@ -150,7 +212,6 @@ class Game_Window < Window
     @door2.draw(375, -20, 0, 4, 4)
     @door2.draw(375, 565, 0, 4, 4)
 
-   
     @chainsaw.draw
     
     @hpack.draw
