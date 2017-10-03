@@ -5,9 +5,10 @@ include Gosu
 class Health_packs < Sprite
   attr_accessor :health, :x, :y, :z, :angle
   
-  def initialize(window, png)
-    @image = Image.new(png, :retro => true)
-    super(window, png)
+  def initialize(window)
+    @half = Image.new("./half heart.png", :retro => true)
+    @full = Image.new("./full heart.png", :retro => true)
+    super(window, "./full heart.png")
     @x = @y = @z = @angle = 0
     @health = (rand(1..2) * 25)
     self.hide
@@ -27,7 +28,11 @@ class Health_packs < Sprite
  
  	def draw
  		if visible?
- 			@image.draw_rot(@x, @y, 0, @angle, 0.5, 0.5, 1.5, 1.5)
+ 		  if @health == 25
+ 		    @half.draw_rot(@x, @y, 0, @angle, 0.5, 0.5, 2, 2)
+ 		  elsif
+ 		    @full.draw_rot(@x, @y, 0, @angle, 0.5, 0.5, 2, 2)
+ 		  end
  		end
  	end
   #the class' end, don't go past

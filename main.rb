@@ -16,7 +16,7 @@ class Game_Window < Window
   def initialize
     super 800, 600
     self.caption = "Placeholder Game Name"
-    @background = Image.new("bg room.png", :retro => true)
+    @background = Image.new("bakku guroundo.png", :retro => true)
     
     @fucked = Sample.new("./deathsound2.wav")
     
@@ -36,7 +36,7 @@ class Game_Window < Window
       
     @chainsaw = Axe.new(self, "./chainsaw.png", 4)
    
-    @hpack = Health_packs.new(self, "./hpack.png")
+    @hpack = Health_packs.new(self)
     
     @door1 = Image.new("door1.png", :retro => true)
     @door2 = Image.new("door2.png", :retro => true)
@@ -62,20 +62,20 @@ class Game_Window < Window
     
     #checking if the player sprite is touching a wall or going through a door
     if @player.health > 0
-     if @player.x > 30
+     if @player.x > 69
        @player.move_left(@@speeed)
      end
      
-     if @player.x < 765
+     if @player.x < 730
        @player.move_right(@@speeed)
      end    
          
-     if @player.y > 30
+     if @player.y > 69
        @player.move_up(@@speeed)
        
      end
      
-     if @player.y < 565
+     if @player.y < 530
        @player.move_down(@@speeed)  
      end
     else
@@ -128,56 +128,56 @@ class Game_Window < Window
 	  @hpack.use(@player)
 	  
 	  # check to see if player has gone through a door
-	  if @player.x <= 30 and @player.y >= 270 and @player.y <= 295
+	  if @player.x <= 69 and @player.y >= 270 and @player.y <= 295
 	  	# going to the left
 	  	# if player is on leftmost room or the room to the left is empty
 	  	if @player.roomx == 0 or @dungeon.map[@player.roomy][@player.roomx - 1].type == 0
 	  		# do nothing
 	  	else
 	  		# move one room to the left and update explored map
-	  		@player.x = 755
+	  		@player.x = 720
 	  		@player.roomx -= 1
 	  		
 	  		@dungeon.update(@player.roomx, @player.roomy)
 	  	end
 	  end
 	  
-	  if @player.x >= 765 and @player.y >= 270 and @player.y <= 295
+	  if @player.x >= 730 and @player.y >= 270 and @player.y <= 295
 	  	# going to the right
 	  	# if player is on rightmost room or the room to the right is empty
 	  	if @player.roomx == @dungeon.map[0].size - 1 or @dungeon.map[@player.roomy][@player.roomx + 1].type == 0
 	  		# do nothing
 	  	else
 	  		# move one room to the right and update explored map
-	  		@player.x = 40
+	  		@player.x = 79
 	  		@player.roomx += 1
 
 	  		@dungeon.update(@player.roomx, @player.roomy)
 	  	end
 	  end
 
-	  if @player.y <= 30 and @player.x >= 395 and @player.x <= 420
+	  if @player.y <= 69 and @player.x >= 395 and @player.x <= 420
 	  	# going up
 	  	# if player is on uppermost room or the room directly up is empty
 	  	if @player.roomy == 0 or @dungeon.map[@player.roomy - 1][@player.roomx].type == 0
 	  		# do nothing
 	  	else
 	  		# move one room up and update explored map
-	  		@player.y = 555
+	  		@player.y = 520
 	  		@player.roomy -= 1
 	  		
 	  		@dungeon.update(@player.roomx, @player.roomy)
 	  	end
 	  end
 	  
-	  if @player.y >= 565 and @player.x >= 395 and @player.x <= 420
+	  if @player.y >= 530 and @player.x >= 395 and @player.x <= 420
 	  	# going down
 	  	# if player is on lowest room or the room down is empty
 	  	if @player.roomy == @dungeon.map.size - 1 or @dungeon.map[@player.roomy + 1][@player.roomx].type == 0
 	  		# do nothing
 	  	else
 	  		# move one room to the right and update explored map
-	  		@player.y = 40
+	  		@player.y = 79
 	  		@player.roomy += 1
 
 	  		@dungeon.update(@player.roomx, @player.roomy)
@@ -192,7 +192,7 @@ class Game_Window < Window
   
     
   def draw
-    @background.draw(-1,-1,0,1,1)
+    @background.draw(-1, -1, 0, 1, 1)
    
     if @player.health > 0
       @player.draw
@@ -207,10 +207,10 @@ class Game_Window < Window
       zombie.draw
     }
     
-    @door1.draw(755, 250, 0, 4, 4)
-    @door1.draw(-30, 250, 0, 4, 4)
-    @door2.draw(375, -20, 0, 4, 4)
-    @door2.draw(375, 565, 0, 4, 4)
+    @door1.draw(722, 250, 0, 4, 4)
+    @door1.draw(4, 250, 0, 4, 4)
+    @door2.draw(375, 13, 0, 4, 4)
+    @door2.draw(375, 528, 0, 4, 4)
 
     @chainsaw.draw
     
@@ -219,7 +219,17 @@ class Game_Window < Window
     if DEBUGGING
       @font.draw("Mouse coords: #{mouse_x}, #{mouse_y}", 0, 0, 0)
       @font.draw("Player coords: #{@player.x}, #{@player.y}", 0, 16, 0)
-      #@font.draw("Player angle: #{@player.angle}", 0, 32, 0)
+      
+      
+     case @player.health
+     when (@player.max_health/4)..(@player.max_health/2)
+      @font.draw("Player health: #{@player.health}", 0, 32, 0, 1, 1, Color::YELLOW)
+      when 0..(@player.max_health/4)
+       @font.draw("Player health: #{@player.health}",0, 32, 0, 1, 1, Color::RED)
+     else
+       @font.draw("Player health: #{@player.health}",0, 32, 0, 1, 1, Color::GREEN)
+     end
+      
       #@font.draw("Chain saw angle: #{@chainsaw.angle}, #{@player.angle + 90}", 0, 48, 0)
       #@font.draw("Chainsaw pos: #{@chainsaw.x}, #{@chainsaw.y}", 0, 64, 0)
     end
