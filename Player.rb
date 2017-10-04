@@ -16,8 +16,8 @@ class Player < Sprite
   end
  
   def warp(x,y,z)
-      @x, @y, @z = x, y, z
-    end
+    @x, @y, @z = x, y, z
+  end
  
   
 #=begin
@@ -44,26 +44,26 @@ class Player < Sprite
   end
    
   def move_right(speed)
-   if Gosu.button_down? KbD
-     @x +=speed
-     @angle = 0
-   end
+    if Gosu.button_down? KbD
+      @x +=speed
+      @angle = 0
+    end
   end
  
   def move
-     @x += @vel_x
-     @y += @vel_y
-     @vel_x *= 0.75
-     @vel_y *= 0.75        
-   end
+    @x += @vel_x
+    @y += @vel_y
+    @vel_x *= 0.75
+    @vel_y *= 0.75        
+  end
 
 
 #=end
   
 
   def take_damage(damage)
-      @health -= damage
-      @oof.play
+    @health -= damage
+    @oof.play
   end
  
  

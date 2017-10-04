@@ -49,6 +49,7 @@ class Sprite < Gosu::Image
     draw_rot(@x + width / 2, @y + height / 2, NO_TILING, @rotation) if @is_visible  
   end
   
+=begin
   # So-so touching?() method, good enough for now.
   def touching?(other_sprite)
     is_touching = false
@@ -65,6 +66,36 @@ class Sprite < Gosu::Image
       end
     end
     return is_touching
+  end
+=end
+  
+  # touching method with x and y as center
+  def touching?(other_sprite)
+  	is_touching = false
+
+    self_upper_left_x = @x - (self.width / 2)
+    self_upper_left_y = @y - (self.height / 2)
+    self_lower_right_x = @x + (self.width / 2)
+    self_lower_right_y = @y + (self.height / 2)
+
+    other_upper_left_x = other_sprite.x - (other_sprite.width / 2)
+    other_upper_left_y = other_sprite.y - (other_sprite.height / 2)
+    other_lower_right_x = other_sprite.x + (other_sprite.width / 2)
+    other_lower_right_y = other_sprite.y + (other_sprite.height / 2)
+    
+		if (other_sprite.visible? and self.visible?)
+			#if (other_upper_left_x.between?(self_upper_left_x, self_lower_right_x) and other_upper_left_y.between?(self_upper_left_y, self_lower_right_y)) \
+			#              or (self_upper_left_x.between?(other_upper_left_x, other_lower_right_x) and self_upper_left_y.between?(other_upper_left_y, other_lower_right_y))
+			#  is_touching = true
+			#end
+			if (other_upper_left_x.between?(self_upper_left_x, self_lower_right_x) or other_lower_right_x.between?(self_upper_left_x, self_lower_right_x))
+				if (other_upper_left_y.between?(self_upper_left_y, self_lower_right_y) or other_lower_right_y.between?(self_upper_left_y, self_lower_right_y))
+					is_touching = true
+				end
+			end
+		end
+  	
+  	return is_touching
   end
 
   def clicked?

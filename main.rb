@@ -246,7 +246,9 @@ class Game_Window < Window
 	    }
 	  end
     
-    #draw_rect(6000 + ())
+    # draw temp bounding box
+	  draw_rect(@player.x - (@player.width / 2), @player.y - (@player.height / 2), @player.width, @player.height, Color::RED, 1)
+	  draw_rect(@chainsaw.x - (@chainsaw.width / 2), @chainsaw.y - (@chainsaw.height / 2), @chainsaw.width, @chainsaw.height, Color::RED, 1)
     
     if @player.health > 0
       @player.draw
