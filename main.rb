@@ -49,10 +49,19 @@ class Game_Window < Window
     @player.roomx = @dungeon.spawn[0]
     @player.roomy = @dungeon.spawn[1]
     @dungeon.update(@player.roomx, @player.roomy)
+    
+    @minimap = true
   end
 
   @@speeed = 4
   @@gitfucked = false
+  
+  def button_down(id)
+		case id
+		when KB_M
+			@minimap = !@minimap
+		end
+  end
   
   def update
     
@@ -193,15 +202,6 @@ class Game_Window < Window
     
   def draw
     @background.draw(-1, -1, 0, 1, 1)
-   
-    if @player.health > 0
-      @player.draw
-    else
-      
-      @player.angle = 180
-    end
-    
-    @cursor.draw(mouse_x, mouse_y, 0, 0.5, 0.5)
 
     @zombies.each {|zombie|
       zombie.draw
@@ -215,6 +215,46 @@ class Game_Window < Window
     @chainsaw.draw
     
     @hpack.draw
+    
+    # draw minimap
+    if @minimap
+			draw_rect(596, 0, 204, 204, Color.rgba(50, 50, 50, 100))
+	    @dungeon.explored.each_with_index { |row, i|
+	    	row.each_with_index { |room, j|
+	    		width = 200.0 / row.size
+	    		height = 200.0 / @dungeon.explored.size
+					case room.type
+					when 1 # normal room
+						draw_rect(600 + (j * width), 2 + (i * height), width, height, Color.rgba(206, 206, 206, 255))
+					when 2 # @spawn room
+						draw_rect(600 + (j * width), 2 + (i * height), width, height, Color::BLUE)
+					when 3 # @boss room
+						draw_rect(600 + (j * width), 2 + (i * height), width, height, Color::RED)
+					when 4 # treasure room
+						draw_rect(600 + (j * width), 2 + (i * height), width, height, Color.rgba(253, 240, 60, 255))
+					else # empty space
+					end
+					
+					# draw outline on room that player is in
+					if i == @player.roomy and j == @player.roomx
+						draw_rect(600 + (j * width), (i * height), width, 2, Color::RED, 1)
+						draw_rect(600 + (j * width), 2 + ((i + 1) * height), width, 2, Color::RED, 1)
+						draw_rect(598 + (j * width), 2 + (i * height), 2, height, Color::RED, 1)
+						draw_rect(600 + ((j + 1) * width), 2 + (i * height), 2, height, Color::RED, 1)
+					end
+	    	}
+	    }
+	  end
+    
+    #draw_rect(6000 + ())
+    
+    if @player.health > 0
+      @player.draw
+    else
+      @player.angle = 180
+    end
+
+    @cursor.draw(mouse_x, mouse_y, 0, 0.5, 0.5)
     
     if DEBUGGING
       @font.draw("Mouse coords: #{mouse_x}, #{mouse_y}", 0, 0, 0)
