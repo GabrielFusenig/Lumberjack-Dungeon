@@ -19,9 +19,6 @@ class Game_Window < Window
     @background = Image.new("bakku guroundo.png", :retro => true)
     
     @fucked = Sample.new("./deathsound2.wav")
-    @grrrrrrr = Sample.new("./sonic the hedgedriver.wav")
-    @grrrrrrr_counter = 20
-    @muhny = Sample.new("./muhny.wav")
     
     @player = Player.new(self)
     @player.warp(400,300,1)
@@ -32,12 +29,11 @@ class Game_Window < Window
     @game_over = Font.new(64, :name => "./munro.ttf")
    
     @num_zombies = rand(1..5)
-    
+         
     @zombies = Array.new(@num_zombies) { Enemy.new(self , "./zombie.png") }
-    @zombie_damage = 2
+    @zombie_damage = 4
 	  @zombies_dead = 0
-    @mboss = Enemy.new(self,"./zombie.png") 
-	   
+      
     @chainsaw = Axe.new(self, "./chainsaw.png", 4)
    
     @hpack = Health_packs.new(self)
@@ -46,7 +42,7 @@ class Game_Window < Window
     @door2 = Image.new("door2.png", :retro => true)
     
     @dungeon = Dungeon.new
-    @dungeon.setSize(8, 8, self, "./zombie.png")
+    @dungeon.setSize(8, 8)
     @dungeon.generate(23059)
     @dungeon.draw
     
@@ -100,40 +96,22 @@ class Game_Window < Window
       end
     end
 
-    
     # chainsaw attack getting called while also changing the player angle depending on which direction you attacked in      
     @chainsaw.attack(@player)
-    @grrrrrrr_counter -= 1
     if Gosu.button_down? KbI
       @player.angle = 270
-      if @grrrrrrr_counter == 0
-        @grrrrrrr.play
-        @grrrrrrr_counter = 20
-      end     
     elsif Gosu.button_down? KbK
       @player.angle = 90
-      if @grrrrrrr_counter == 0
-        @grrrrrrr.play
-        @grrrrrrr_counter = 20
-      end 
     elsif Gosu.button_down? KbJ
       @player.angle = 180
-      if @grrrrrrr_counter == 0
-        @grrrrrrr.play
-        @grrrrrrr_counter = 20
-      end
     elsif Gosu.button_down? KbL
       @player.angle = 0
-      if @grrrrrrr_counter == 0
-        @grrrrrrr.play
-        @grrrrrrr_counter = 20
-      end
     end
     
      
 	  unless @player.health <= 0
-	    @dungeon.enemies[@player.roomy][@player.roomx].each {|zombie|
-	      @chainsaw.axe(zombie, @muhny)
+	    @zombies.each {|zombie|
+	      @chainsaw.axe(zombie)
 	      zombie.attack(@player)
 	      if zombie.touching?(@player)
 	        @player.take_damage(@zombie_damage)
@@ -148,11 +126,8 @@ class Game_Window < Window
 	    }
 	  end
 
-	  @mboss.attack(@player)
-	  @chainsaw.axe(@mboss, @muhny)
-	  
 	  # check to see if all zombies are dead, and if they are, spawn a health pack
-	  if (@zombies_dead >= @dungeon.enemies[@player.roomy][@player.roomx].size)
+	  if (@zombies_dead >= @num_zombies)
 	  	@hpack.x = 400
 	  	@hpack.y = 300
 	  	@hpack.show
@@ -173,8 +148,6 @@ class Game_Window < Window
 	  		@player.roomx -= 1
 	  		
 	  		@dungeon.update(@player.roomx, @player.roomy)
-	  	  #@zombies.each {|z| z.respawn }
-        @zombies_dead = 0
 	  	end
 	  end
 	  
@@ -189,8 +162,6 @@ class Game_Window < Window
 	  		@player.roomx += 1
 
 	  		@dungeon.update(@player.roomx, @player.roomy)
-	  		#@zombies.each {|z| z.respawn }
-	  		@zombies_dead = 0
 	  	end
 	  end
 
@@ -205,8 +176,6 @@ class Game_Window < Window
 	  		@player.roomy -= 1
 	  		
 	  		@dungeon.update(@player.roomx, @player.roomy)
-        #@zombies.each {|z| z.respawn }
-        @zombies_dead = 0
 	  	end
 	  end
 	  
@@ -221,13 +190,9 @@ class Game_Window < Window
 	  		@player.roomy += 1
 
 	  		@dungeon.update(@player.roomx, @player.roomy)
-        #@zombies.each {|z| z.respawn }
-        @zombies_dead = 0
 	  	end
 	  end
-	  if @dungeon.map[@player.roomy][@player.roomx].type == 4
-	    	    
-	  end
+	  
 	  
   end
 
@@ -238,13 +203,9 @@ class Game_Window < Window
   def draw
     @background.draw(-1, -1, 0, 1, 1)
 
-    @dungeon.enemies[@player.roomy][@player.roomx].each {|zombie|
-      zombie.draw(1.5, 1.5, 100)
-      draw_rect(zombie.x - (zombie.width / 2), zombie.y - (zombie.height / 2), zombie.width, zombie.height, Color::RED, 1)
+    @zombies.each {|zombie|
+      zombie.draw
     }
-    if @dungeon.map[@player.roomy][@player.roomx].type == 4
-      @mboss.draw(2.3, 2.3, 200)
-    end
     
     @door1.draw(722, 250, 0, 4, 4)
     @door1.draw(4, 250, 0, 4, 4)
@@ -268,7 +229,7 @@ class Game_Window < Window
 					when 2 # @spawn room
 						draw_rect(600 + (j * width), 2 + (i * height), width, height, Color::BLUE)
 					when 3 # @boss room
-						draw_rect(600 + (j * width), 2 + (i * height), width, height, Color::BLACK)
+						draw_rect(600 + (j * width), 2 + (i * height), width, height, Color::RED)
 					when 4 # treasure room
 						draw_rect(600 + (j * width), 2 + (i * height), width, height, Color.rgba(253, 240, 60, 255))
 					else # empty space
@@ -276,10 +237,10 @@ class Game_Window < Window
 					
 					# draw outline on room that player is in
 					if i == @player.roomy and j == @player.roomx
-						draw_rect(600 + (j * width), (i * height), width, 2, Color::GREEN, 1)
-						draw_rect(600 + (j * width), 2 + ((i + 1) * height), width, 2, Color::GREEN, 1)
-						draw_rect(598 + (j * width), 2 + (i * height), 2, height, Color::GREEN, 1)
-						draw_rect(600 + ((j + 1) * width), 2 + (i * height), 2, height, Color::GREEN, 1)
+						draw_rect(600 + (j * width), (i * height), width, 2, Color::RED, 1)
+						draw_rect(600 + (j * width), 2 + ((i + 1) * height), width, 2, Color::RED, 1)
+						draw_rect(598 + (j * width), 2 + (i * height), 2, height, Color::RED, 1)
+						draw_rect(600 + ((j + 1) * width), 2 + (i * height), 2, height, Color::RED, 1)
 					end
 	    	}
 	    }

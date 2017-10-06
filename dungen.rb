@@ -1,7 +1,7 @@
 # Room Dungeon generator
 # Code by Ryuya
 # version 1.0
-require 'Enemy'
+
 
 class Room
 	attr_accessor :type
@@ -31,10 +31,10 @@ class Room
 end
 
 class Dungeon
-	attr_accessor :spawn, :boss, :map, :explored, :enemies
+	attr_accessor :spawn, :boss, :map, :explored
 	@spawn = [ 0, 0 ]
 	@boss = [ 0, 0 ]
-	  
+	
 	def createPath(rng, m, start, finish, y1, dy1)
 		y = y1
 		dy = dy1
@@ -82,13 +82,12 @@ class Dungeon
 		end
 	end
 	
-	def setSize(w, h, window, sprite)
+	def setSize(w, h)
 		# array of rooms
 		@map = Array.new(h) { Array.new(w) { Room.new } }
 		@explored = Array.new(h) { Array.new(w) { Room.new } }
 		@w = w
 		@h = h
-	  @enemies = Array.new(h) { Array.new(w) { Array.new(rand(1..5)) { Enemy.new(window, sprite) } } }
 	end
 	
 	def generate(seed = 0)

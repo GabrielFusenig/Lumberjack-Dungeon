@@ -18,14 +18,13 @@ class Health_packs < Sprite
    if touching? player
      player.health += @health
      self.hide
-     @health = rand(1..2) * 25 #rerolll
    end
    
    if player.health > player.max_health
      player.health = player.max_health
    end
  end
- 
+     
  
  	def draw
  		if visible?

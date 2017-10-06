@@ -12,17 +12,16 @@ class Enemy < Sprite
     super(window, sprite)
     @vel_x = @vel_y = @z = @angle = 0
     @health = @max_health =100
-    @x = rand(100..700)
-    @y = rand(100..500)
+    @x = rand(50..750)
+    @y = rand(50..550)
   end
   
   def warp(x,y,z)
     @x, @y, @z = x, y, z
   end
   
-  def take_dmg(dmg, wav)
+  def take_dmg(dmg)
     @health -= dmg
-    wav.play
   end
   
   
@@ -41,19 +40,10 @@ class Enemy < Sprite
   end
   
   
-  def respawn
-    @health = @max_health =100
-    @x = rand(100..700)
-    @y = rand(100..500)
-    self.show
-    
-  end
-  
-   def draw(wide, tall, health)
+   def draw
      if visible?
-        @image.draw_rot(@x,@y,1,@angle, 0.5, 0.5, wide, tall) 
+        @image.draw_rot(@x,@y,1,@angle, 0.5, 0.5, 1.5, 1.5) 
     
-        @health = health
       case @health
       when (@max_health/4)..(@max_health/2)
         draw_rect(@x - 16, @y - 25, 32.0 * (1.0 * @health/@max_health), 2, Color::YELLOW)
