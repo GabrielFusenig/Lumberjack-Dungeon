@@ -24,25 +24,6 @@ class Axe < Sprite
       @image.draw_rot(@x, @y, 1, @angle, 0.5, 0.5, 1.5, 1.5)
     end 
   end
-  
-=begin  
-    def attack(player)
-      @angle = player.angle + 90
-      if @angle == 90
-        @x = player.x + 40
-        @y = player.y
-      elsif @angle == 180
-        @x = player.x
-        @y = player.y + 40
-      elsif @angle == 270
-        @x = player.x - 40
-        @y = player.y
-      elsif @angle == 0
-        @x = player.x
-        @y = player.y - 40
-      end
-    end
-=end 
 
   
   #the chainsaw attack method, moves the chainsaw to different positions around the player depending on the button pressed
@@ -82,9 +63,9 @@ class Axe < Sprite
   end
  
   
-    def axe(enemy)
+    def axe(enemy, wav)
       if touching? enemy
-        enemy.take_dmg(@dmg)
+        enemy.take_dmg(@dmg, wav)
       end
     end
     
