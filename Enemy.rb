@@ -49,11 +49,10 @@ class Enemy < Sprite
     
   end
   
-   def draw(wide, tall, health)
+   def draw(wide, tall)
      if visible?
-        @image.draw_rot(@x,@y,1,@angle, 0.5, 0.5, wide, tall) 
-    
-        @health = health
+      @image.draw_rot(@x,@y,1,@angle, 0.5, 0.5, wide, tall) 
+      
       case @health
       when (@max_health/4)..(@max_health/2)
         draw_rect(@x - 16, @y - 25, 32.0 * (1.0 * @health/@max_health), 2, Color::YELLOW)

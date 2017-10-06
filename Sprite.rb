@@ -84,12 +84,13 @@ class Sprite < Gosu::Image
     other_lower_right_y = other_sprite.y + (other_sprite.height / 2)
     
 		if (other_sprite.visible? and self.visible?)
-			#if (other_upper_left_x.between?(self_upper_left_x, self_lower_right_x) and other_upper_left_y.between?(self_upper_left_y, self_lower_right_y)) \
-			#              or (self_upper_left_x.between?(other_upper_left_x, other_lower_right_x) and self_upper_left_y.between?(other_upper_left_y, other_lower_right_y))
-			#  is_touching = true
-			#end
 			if (other_upper_left_x.between?(self_upper_left_x, self_lower_right_x) or other_lower_right_x.between?(self_upper_left_x, self_lower_right_x))
 				if (other_upper_left_y.between?(self_upper_left_y, self_lower_right_y) or other_lower_right_y.between?(self_upper_left_y, self_lower_right_y))
+					is_touching = true
+				end
+			end
+			if (self_upper_left_x.between?(other_upper_left_x, other_lower_right_x) or self_lower_right_x.between?(other_upper_left_x, other_lower_right_x))
+				if (self_upper_left_y.between?(other_upper_left_y, other_lower_right_y) or self_lower_right_y.between?(other_upper_left_y, other_lower_right_y))
 					is_touching = true
 				end
 			end

@@ -173,7 +173,6 @@ class Game_Window < Window
 	  		@player.roomx -= 1
 	  		
 	  		@dungeon.update(@player.roomx, @player.roomy)
-	  	  #@zombies.each {|z| z.respawn }
         @zombies_dead = 0
 	  	end
 	  end
@@ -189,7 +188,6 @@ class Game_Window < Window
 	  		@player.roomx += 1
 
 	  		@dungeon.update(@player.roomx, @player.roomy)
-	  		#@zombies.each {|z| z.respawn }
 	  		@zombies_dead = 0
 	  	end
 	  end
@@ -205,7 +203,6 @@ class Game_Window < Window
 	  		@player.roomy -= 1
 	  		
 	  		@dungeon.update(@player.roomx, @player.roomy)
-        #@zombies.each {|z| z.respawn }
         @zombies_dead = 0
 	  	end
 	  end
@@ -221,10 +218,10 @@ class Game_Window < Window
 	  		@player.roomy += 1
 
 	  		@dungeon.update(@player.roomx, @player.roomy)
-        #@zombies.each {|z| z.respawn }
         @zombies_dead = 0
 	  	end
 	  end
+	  
 	  if @dungeon.map[@player.roomy][@player.roomx].type == 4
 	    	    
 	  end
@@ -239,11 +236,11 @@ class Game_Window < Window
     @background.draw(-1, -1, 0, 1, 1)
 
     @dungeon.enemies[@player.roomy][@player.roomx].each {|zombie|
-      zombie.draw(1.5, 1.5, 100)
-      draw_rect(zombie.x - (zombie.width / 2), zombie.y - (zombie.height / 2), zombie.width, zombie.height, Color::RED, 1)
+      zombie.draw(1.5, 1.5)
+      #draw_rect(zombie.x - (zombie.width / 2), zombie.y - (zombie.height / 2), zombie.width, zombie.height, Color::RED, 1)
     }
     if @dungeon.map[@player.roomy][@player.roomx].type == 4
-      @mboss.draw(2.3, 2.3, 200)
+      @mboss.draw(2.3, 2.3)
     end
     
     @door1.draw(722, 250, 0, 4, 4)
@@ -286,8 +283,8 @@ class Game_Window < Window
 	  end
     
     # draw temp bounding box
-	  draw_rect(@player.x - (@player.width / 2), @player.y - (@player.height / 2), @player.width, @player.height, Color::RED, 1)
-	  draw_rect(@chainsaw.x - (@chainsaw.width / 2), @chainsaw.y - (@chainsaw.height / 2), @chainsaw.width, @chainsaw.height, Color::RED, 1)
+	  #draw_rect(@player.x - (@player.width / 2), @player.y - (@player.height / 2), @player.width, @player.height, Color::RED, 1)
+	  #draw_rect(@chainsaw.x - (@chainsaw.width / 2), @chainsaw.y - (@chainsaw.height / 2), @chainsaw.width, @chainsaw.height, Color::RED, 1)
     
     if @player.health > 0
       @player.draw
