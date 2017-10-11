@@ -38,9 +38,9 @@ class Game_Window < Window
     @zombies = Array.new(@num_zombies) { Enemy.new(self , "./zombie.png") }
     @zombie_damage = 2
 	  @zombies_dead = 0
-    @mboss = Miniboss.new(self,"./moldy boi.png") 
+    @mboss = Miniboss.new(self,"./furry boi.png") 
 	   
-    @chainsaw = Axe.new(self, "./chainsaw.png", 4)
+    @chainsaw = Axe.new(self, "./chainsaw.png", 2)
    
     @hpack = Health_packs.new(self)
     
