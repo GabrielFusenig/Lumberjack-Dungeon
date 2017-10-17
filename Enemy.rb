@@ -51,7 +51,7 @@ class Enemy < Sprite
   
    def draw(wide, tall)
      if visible?
-      @image.draw_rot(@x,@y,1,@angle, 0.5, 0.5, wide, tall) 
+      @image.draw_rot(@x, @y, 1, @angle, 0.5, 0.5, wide, tall) 
       
       case @health
       when (@max_health/4)..(@max_health/2)

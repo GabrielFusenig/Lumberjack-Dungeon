@@ -16,7 +16,7 @@ require 'Gosu'
 # A Sprite is defined as a special type of Image.
 class Sprite < Gosu::Image
   NO_TILING = 0   if (!Sprite.const_defined?(:NO_TILING))
-  attr_accessor :x, :y, :is_visible  # Makes the x and y variables available
+  attr_accessor :x, :y, :is_visible, :rotation  # Makes the x and y variables available
                         # to other objects.
 
   # Initializes a Sprite with a window and file location of the Image.

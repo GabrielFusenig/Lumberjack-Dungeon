@@ -1,6 +1,7 @@
 require 'Gosu'
 require 'Sprite.rb'
 require 'Player'
+require 'Enemy'
 include Gosu
 
 
@@ -14,6 +15,17 @@ class Miniboss < Enemy
     @health = @max_health = 200
     @x = rand(100..700)
     @y = rand(100..500)
+    
+    @charging = true # when this is false, he shoots bullets
+    @bulletTime = 180
+    @bulletDelay = 5
+    @bulletDelayCounter = 5
+    @bulletNum = 5
+    @bullets = Array.new
+  end
+  
+  def setBulletType(window, sprite)
+    @bullet = Sprite.new(window, sprite)
   end
   
   def warp(x,y,z)
@@ -27,17 +39,37 @@ class Miniboss < Enemy
   
   
   def attack(player)
-    angle = Math.atan((1.0 * player.y - @y) / (player.x - @x))
-    
-    if player.x > @x
-      angle -= Math::PI
+    if @charging # charge toward player
+      angle = Math.atan((1.0 * player.y - @y) / (player.x - @x))
+      
+      if player.x > @x
+        angle -= Math::PI
+      end
+      
+      @angle = (angle * 180 / Math::PI) + 90
+      @vel_x = 2 * Math.cos(angle)
+      @vel_y = 2 * Math.sin(angle)
+    else # shoot some bullets and wander
+      if @bulletTime % 60 == 0
+        @vel_x = (rand * 2) - 1
+        @vel_y = (rand * 2) - 1
+      end
+      if @bulletDelayCounter <= 0
+        @bullet.move_to(@x,@y)
+        @bulletNum.times do |i|
+          @bullet.rotation = @angle + ((360 / @bulletNum) * i) - 90
+          @bullets.push(@bullet.clone)
+        end
+        @bulletDelayCounter = @bulletDelay
+      end
     end
-    
-    @angle = (angle * 180 / Math::PI) + 90
-    @vel_x = 2 * Math.cos(angle)
-    @vel_y = 2 * Math.sin(angle)
     @x -= @vel_x
     @y -= @vel_y
+    @bullets.each {|bullet|
+      bullet.x -= 5 * Math.cos(Math::PI * bullet.rotation / 180)
+      bullet.y -= 5 * Math.sin(Math::PI * bullet.rotation / 180)
+    }
+    @bulletDelayCounter -= 1
   end
   
   
@@ -49,18 +81,31 @@ class Miniboss < Enemy
     
   end
   
+  def switchPhase
+    @bulletTime -= 1
+    if @bulletTime <= 0
+      # switch phases
+      @charging = !@charging
+      @bulletTime = 180
+    end
+  end
+  
    def draw(wide, tall)
      if visible?
       @image.draw_rot(@x,@y,1,@angle, 0.5, 0.5, wide, tall) 
       
       case @health
       when (@max_health/4)..(@max_health/2)
-        draw_rect(@x - 16, @y - 25, 32.0 * (1.0 * @health/@max_health), 2, Color::YELLOW)
+        draw_rect(@x - 16, @y - 40, 32.0 * (1.0 * @health/@max_health), 2, Color::YELLOW)
       when 0..(@max_health/4)
-        draw_rect(@x - 16, @y - 25, 32.0 * (1.0 * @health/@max_health), 2, Color::RED)
+        draw_rect(@x - 16, @y - 40, 32.0 * (1.0 * @health/@max_health), 2, Color::RED)
       else
-        draw_rect(@x - 16, @y - 25, 32.0 * (1.0 * @health/@max_health), 2, Color::GREEN)
+        draw_rect(@x - 16, @y - 40, 32.0 * (1.0 * @health/@max_health), 2, Color::GREEN)
       end
+      
+      @bullets.each {|bullet|
+        @bullet.draw_rot(bullet.x, bullet.y, 1, bullet.rotation, 1.5, 1.5)
+      }
     end
   end
 end

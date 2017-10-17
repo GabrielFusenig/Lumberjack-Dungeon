@@ -38,7 +38,9 @@ class Game_Window < Window
     @zombies = Array.new(@num_zombies) { Enemy.new(self , "./zombie.png") }
     @zombie_damage = 2
 	  @zombies_dead = 0
-    @mboss = Miniboss.new(self,"./furry boi.png") 
+	  
+    @mboss = Miniboss.new(self,"./furry boi.png")
+    @mboss.setBulletType(self, "./shuriken.png")
 	   
     @chainsaw = Axe.new(self, "./chainsaw.png", 2)
    
@@ -49,7 +51,8 @@ class Game_Window < Window
     
     @dungeon = Dungeon.new
     @dungeon.setSize(8, 8, self, "./zombie.png")
-    @dungeon.generate(23059)
+    #@dungeon.generate(23059)
+    @dungeon.generate(458)
     @dungeon.draw
     
     @player.roomx = @dungeon.spawn[0]
@@ -163,9 +166,10 @@ class Game_Window < Window
   	      end
   	    }
   	  end
-  
-  	  @mboss.attack(@player)
+  	  
   	  if @dungeon.map[@player.roomy][@player.roomx].type == 4
+        @mboss.attack(@player)
+        @mboss.switchPhase
   	    @chainsaw.axe(@mboss, @muhny)
   	  end
   	  
