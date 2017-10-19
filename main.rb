@@ -24,6 +24,14 @@ class Game_Window < Window
     @grrrrrrr = Sample.new("./chainsaw_noise.wav")
     @grrrrrrr_counter = 0
     @muhny = Sample.new("./zombiedmg.wav")
+
+    # bgm
+    @explore_intro = Song.new("./th11_04_intro.wav")
+    @explore_loop = Song.new("./th11_04_loop.wav")
+    @miniboss_intro = Song.new("./th11_03_intro.wav")
+    @miniboss_loop = Song.new("./th11_03_loop.wav")
+    @boss_intro = Song.new("./th10_11_intro.wav")
+    @boss_loop = Song.new("./th10_11_loop.wav")
     
     @score = 0
     
@@ -72,14 +80,15 @@ class Game_Window < Window
   @@gitfucked = false
   
   def button_down(id)
-		case id
-		when KB_M
-			@minimap = !@minimap
-		when MsLeft
-		  if mouse_x >= 350 && mouse_x <= 450 && mouse_y >= 400 && mouse_y <= 460
-		    @game_state = @game
-		  end
-		end
+    case id
+    when KB_M
+      @minimap = !@minimap
+    when MsLeft
+      if mouse_x >= 350 && mouse_x <= 450 && mouse_y >= 400 && mouse_y <= 460
+        @game_state = @game
+        @explore_intro.play
+      end
+    end
 		
   end
   
@@ -93,6 +102,23 @@ class Game_Window < Window
     when @main_menu
       #draw the menu screen
     when @game
+
+      # update bgm
+      case @dungeon.map[@player.roomy][@player.roomx].type
+      when 1..2 # exploring music
+        if !@explore_intro.playing? and Song.current_song != @explore_loop
+          @explore_loop.play
+        end
+      when 3 # boss music
+        if !@boss_intro.playing? and Song.current_song != @boss_loop
+          @boss_loop.play
+        end
+      when 4 # miniboss music
+        if !@miniboss_intro.playing? and Song.current_song != @miniboss_loop
+          @miniboss_loop.play
+        end
+      end
+
       
       #checking if the player sprite is touching a wall or going through a door
       if @player.health > 0
