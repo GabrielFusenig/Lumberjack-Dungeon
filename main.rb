@@ -23,7 +23,9 @@ class Game_Window < Window
     @fucked = Sample.new("./deathsound2.wav")
     @grrrrrrr = Sample.new("./chainsaw_noise.wav")
     @grrrrrrr_counter = 0
-    @muhny = Sample.new("./muhny.wav")
+    @muhny = Sample.new("./zombiedmg.wav")
+    
+    @score = 0
     
     @player = Player.new(self)
     @player.warp(400,300,1)
@@ -161,32 +163,57 @@ class Game_Window < Window
   	      if zombie.health <= 0
   	        if zombie.is_visible
   		        @zombies_dead +=1
-  		        end
+              @score += 1
+              
+              if @score % 20 == 0
+                @player.max_health += 20
+                @player.health += 20
+              end
+              
+              if @score % 30 == 0 and @score <= 60
+                @chainsaw.dmg += 1
+              end
+  		      end
   	        zombie.hide
   	      end
   	    }
+  	    
   	  end
   	  
   	  if @dungeon.map[@player.roomy][@player.roomx].type == 4
-        @mboss.attack(@player)
-        @mboss.switchPhase
-  	    @chainsaw.axe(@mboss, @muhny)
+        unless @mboss.health <= 0
+    	    @mboss.attack(@player)
+          @mboss.switchPhase
+    	    @chainsaw.axe(@mboss, @muhny)
+        end
   	  end
   	  
   	  if @mboss.health <= 0
+        if @mboss.visible?
+          @zombies_dead += 1
+        end
   	    @mboss.hide
+  	    
   	  else
   	    @mboss.show
   	  end
   	  
   	  # check to see if all zombies are dead, and if they are, spawn a health pack
-  	  if (@zombies_dead >= @dungeon.enemies[@player.roomy][@player.roomx].size)
-  	  	@hpack.x = 400
-  	  	@hpack.y = 300
-  	  	@hpack.show
-  	  	@zombies_dead = 0
-  	  end
-  	  
+      if @dungeon.map[@player.roomy][@player.roomx].type == 4
+        if (@zombies_dead >= @dungeon.enemies[@player.roomy][@player.roomx].size + 1)
+    	  	@hpack.x = 400
+    	  	@hpack.y = 300
+    	  	@hpack.show
+    	  	@zombies_dead = 0
+    	  end
+      else
+        if (@zombies_dead >= @dungeon.enemies[@player.roomy][@player.roomx].size)
+          @hpack.x = 400
+          @hpack.y = 300
+          @hpack.show
+          @zombies_dead = 0
+        end
+      end
   	  @hpack.use(@player)
   	  
   	  # check to see if player has gone through a door
@@ -250,9 +277,7 @@ class Game_Window < Window
   	  	end
   	  end
   	  
-  	  if @dungeon.map[@player.roomy][@player.roomx].type == 4
-  	    	    
-  	  end
+  	  
   	end
   end
 
@@ -286,6 +311,8 @@ class Game_Window < Window
       if @dungeon.map[@player.roomy][@player.roomx].type == 4
         @mboss.draw(2.3, 2.3)
       end
+      
+      @font.draw("Score: #{@score}", 750, 0, 0, 1, 1)
       
       @door1.draw(722, 250, 0, 4, 4)
       @door1.draw(4, 250, 0, 4, 4)

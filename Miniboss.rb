@@ -16,11 +16,12 @@ class Miniboss < Enemy
     @x = rand(100..700)
     @y = rand(100..500)
     
+    @spin = 0
     @charging = true # when this is false, he shoots bullets
     @bulletTime = 180
     @bulletDelay = 5
     @bulletDelayCounter = 5
-    @bulletNum = 5
+    @bulletNum = 4
     @bullets = Array.new
   end
   
@@ -54,21 +55,31 @@ class Miniboss < Enemy
         @vel_x = (rand * 2) - 1
         @vel_y = (rand * 2) - 1
       end
+      
       if @bulletDelayCounter <= 0
         @bullet.move_to(@x,@y)
         @bulletNum.times do |i|
-          @bullet.rotation = @angle + ((360 / @bulletNum) * i) - 90
+          @bullet.rotation = @angle + ((360 / @bulletNum) * i) - 90 + @spin
           @bullets.push(@bullet.clone)
+          @spin += 1
         end
         @bulletDelayCounter = @bulletDelay
       end
     end
     @x -= @vel_x
     @y -= @vel_y
-    @bullets.each {|bullet|
+    @bullets.each_with_index {|bullet, i|
       bullet.x -= 5 * Math.cos(Math::PI * bullet.rotation / 180)
       bullet.y -= 5 * Math.sin(Math::PI * bullet.rotation / 180)
+      
+      @bullet.x = bullet.x
+      @bullet.y = bullet.y
+      if @bullet.touching? player
+        player.take_damage(10)
+        @bullets.delete_at(i)
+      end
     }
+    
     @bulletDelayCounter -= 1
   end
   
@@ -95,16 +106,16 @@ class Miniboss < Enemy
       @image.draw_rot(@x,@y,1,@angle, 0.5, 0.5, wide, tall) 
       
       case @health
-      when (@max_health/4)..(@max_health/2)
-        draw_rect(@x - 16, @y - 40, 32.0 * (1.0 * @health/@max_health), 2, Color::YELLOW)
-      when 0..(@max_health/4)
-        draw_rect(@x - 16, @y - 40, 32.0 * (1.0 * @health/@max_health), 2, Color::RED)
+      when (@max_health / 4)..(@max_health / 2)
+        draw_rect(@x - 16, @y - 40, 32.0 * (1.0 * @health / @max_health), 2, Color::YELLOW)
+      when 0..(@max_health / 4)
+        draw_rect(@x - 16, @y - 40, 32.0 * (1.0 * @health / @max_health), 2, Color::RED)
       else
-        draw_rect(@x - 16, @y - 40, 32.0 * (1.0 * @health/@max_health), 2, Color::GREEN)
+        draw_rect(@x - 16, @y - 40, 32.0 * (1.0 * @health / @max_health), 2, Color::GREEN)
       end
       
       @bullets.each {|bullet|
-        @bullet.draw_rot(bullet.x, bullet.y, 1, bullet.rotation, 1.5, 1.5)
+        @bullet.draw_rot(bullet.x, bullet.y, 1, bullet.rotation, 0.5, 0.5)
       }
     end
   end

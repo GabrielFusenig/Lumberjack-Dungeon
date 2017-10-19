@@ -2,6 +2,7 @@
 # Code by Ryuya
 # version 1.0
 require 'Enemy'
+require 'Miniboss'
 
 class Room
 	attr_accessor :type
@@ -34,7 +35,8 @@ class Dungeon
 	attr_accessor :spawn, :boss, :map, :explored, :enemies
 	@spawn = [ 0, 0 ]
 	@boss = [ 0, 0 ]
-	  
+	 
+	   
 	def createPath(rng, m, start, finish, y1, dy1)
 		y = y1
 		dy = dy1
@@ -140,6 +142,7 @@ class Dungeon
 		# set trooms
 		for r in trooms
 			@map[r[1]][r[0]].setType(4)
+			@enemies[r[1]][r[0]].setType(4)
 		end
 		
 		# set @spawn room
