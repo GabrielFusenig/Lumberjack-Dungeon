@@ -12,20 +12,26 @@ class Miniboss < Enemy
     @image = Image.new(sprite, :retro => true)
     super(window, sprite)
     @vel_x = @vel_y = @z = @angle = 0
-    @health = @max_health = 200
+    @health = @max_health = 800
     @x = rand(100..700)
     @y = rand(100..500)
     
     @spin = 0
     @spin_speed = 1
     @charging = true # when this is false, he shoots bullets
-    @bulletTime = 180
-    @bulletDelay = 5
+    @bulletTime = 15
+    @bulletDelay = 15
     @bulletDelayCounter = 5
-    @bulletNum = 4
+    @bulletNum = 5
+    @bulletAngle = 360
+    @bulletSpeed = 4
     @bullets = Array.new
     
     @is_boss = true
+  end
+  
+  def setHealth(hp)
+    @health = @max_health = hp
   end
   
   def setBulletType(window, sprite)
@@ -63,18 +69,18 @@ class Miniboss < Enemy
       if @bulletDelayCounter <= 0
         @bullet.move_to(@x,@y)
         @bulletNum.times do |i|
-          @bullet.rotation = @angle + ((360 / @bulletNum) * i) - 90 + @spin
+          @bullet.rotation = @angle + ((1.0 * @bulletAngle / @bulletNum) * i) - 90 + @spin
           @bullets.push(@bullet.clone)
-          @spin += @spin_speed
         end
         @bulletDelayCounter = @bulletDelay
       end
+      @spin += @spin_speed
     end
     @x -= @vel_x
     @y -= @vel_y
     @bullets.each_with_index {|bullet, i|
-      bullet.x -= 5 * Math.cos(Math::PI * bullet.rotation / 180)
-      bullet.y -= 5 * Math.sin(Math::PI * bullet.rotation / 180)
+      bullet.x -= @bulletSpeed * Math.cos(Math::PI * bullet.rotation / 180)
+      bullet.y -= @bulletSpeed * Math.sin(Math::PI * bullet.rotation / 180)
       
       @bullet.x = bullet.x
       @bullet.y = bullet.y

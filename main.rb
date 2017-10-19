@@ -181,18 +181,18 @@ class Game_Window < Window
        
   	  unless @player.health <= 0
   	    @dungeon.enemies[@player.roomy][@player.roomx].each {|zombie|
-  	      @chainsaw.axe(zombie, @muhny)
-  	      zombie.attack(@player)
-  	      if zombie.touching?(@player)
-  	        @player.take_damage(@zombie_damage)
-  	      end
-  	      
-  	      if zombie.is_boss
-  	      	zombie.switchPhase
-  	      end
-  	      
-  	      if zombie.health <= 0
-  	        if zombie.is_visible
+	        if zombie.is_visible
+	  	      @chainsaw.axe(zombie, @muhny)
+	  	      zombie.attack(@player)
+	  	      if zombie.touching?(@player)
+	  	        @player.take_damage(@zombie_damage)
+	  	      end
+	  	      
+	  	      if zombie.is_boss
+	  	      	zombie.switchPhase
+	  	      end
+	  	      
+	  	      if zombie.health <= 0
   		        @zombies_dead +=1
               @score += 1
               
@@ -201,11 +201,11 @@ class Game_Window < Window
                 @player.health += 20
               end
               
-              if @score % 30 == 0 and @score <= 60
+              if @score % 40 == 0 and @score <= 80
                 @chainsaw.dmg += 1
               end
-  		      end
-  	        zombie.hide
+	  	        zombie.hide
+	  	      end
   	      end
   	    }
   	    
