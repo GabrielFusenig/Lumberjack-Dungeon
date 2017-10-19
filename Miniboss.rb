@@ -6,7 +6,7 @@ include Gosu
 
 
 class Miniboss < Enemy
-  attr_accessor :x, :y, :z, :angle, :vel_x, :vel_y, :health, :max_health
+  attr_accessor :x, :y, :z, :angle, :vel_x, :vel_y, :health, :max_health, :spin_speed, :bulletNum
   
   def initialize(window, sprite)
     @image = Image.new(sprite, :retro => true)
@@ -17,12 +17,15 @@ class Miniboss < Enemy
     @y = rand(100..500)
     
     @spin = 0
+    @spin_speed = 1
     @charging = true # when this is false, he shoots bullets
     @bulletTime = 180
     @bulletDelay = 5
     @bulletDelayCounter = 5
     @bulletNum = 4
     @bullets = Array.new
+    
+    @is_boss = true
   end
   
   def setBulletType(window, sprite)
@@ -37,6 +40,7 @@ class Miniboss < Enemy
     @health -= dmg
     wav.play
   end
+  
   
   
   def attack(player)
@@ -61,7 +65,7 @@ class Miniboss < Enemy
         @bulletNum.times do |i|
           @bullet.rotation = @angle + ((360 / @bulletNum) * i) - 90 + @spin
           @bullets.push(@bullet.clone)
-          @spin += 1
+          @spin += @spin_speed
         end
         @bulletDelayCounter = @bulletDelay
       end
@@ -76,6 +80,10 @@ class Miniboss < Enemy
       @bullet.y = bullet.y
       if @bullet.touching? player
         player.take_damage(10)
+        @bullets.delete_at(i)
+      end
+      
+      if bullet.x <= 69 or bullet.x >= 730 or bullet.y <= 69 or bullet.y >= 530
         @bullets.delete_at(i)
       end
     }

@@ -16,7 +16,7 @@ is_dead = false
 class Game_Window < Window
   def initialize
     super 800, 600
-    self.caption = "Placeholder Game Name"
+    self.caption = "Lumberjack Dungeon"
     @background = Image.new("bakku guroundo.png", :retro => true)
     #@menu = Image.new("")
     
@@ -49,8 +49,8 @@ class Game_Window < Window
     @zombie_damage = 2
 	  @zombies_dead = 0
 	  
-    @mboss = Miniboss.new(self,"./furry boi.png")
-    @mboss.setBulletType(self, "./shuriken.png")
+    #@mboss = Miniboss.new(self,"./furry boi.png")
+    #@mboss.setBulletType(self, "./shuriken.png")
 	   
     @chainsaw = Axe.new(self, "./chainsaw.png", 2)
    
@@ -63,6 +63,7 @@ class Game_Window < Window
     @dungeon.setSize(8, 8, self, "./zombie.png")
     #@dungeon.generate(23059)
     @dungeon.generate(458)
+    @dungeon.spawnBosses(self, "./furry boi.png", "./shuriken.png")
     @dungeon.draw
     
     @player.roomx = @dungeon.spawn[0]
@@ -162,7 +163,7 @@ class Game_Window < Window
         if @grrrrrrr_counter <= 0
           @grrrrrrr.play
           @grrrrrrr_counter = 5
-        end 
+        end
       elsif Gosu.button_down? KbJ
         @player.angle = 180
         if @grrrrrrr_counter <= 0
@@ -186,6 +187,10 @@ class Game_Window < Window
   	        @player.take_damage(@zombie_damage)
   	      end
   	      
+  	      if zombie.is_boss
+  	      	zombie.switchPhase
+  	      end
+  	      
   	      if zombie.health <= 0
   	        if zombie.is_visible
   		        @zombies_dead +=1
@@ -206,6 +211,7 @@ class Game_Window < Window
   	    
   	  end
   	  
+=begin
   	  if @dungeon.map[@player.roomy][@player.roomx].type == 4
         unless @mboss.health <= 0
     	    @mboss.attack(@player)
@@ -223,6 +229,7 @@ class Game_Window < Window
   	  else
   	    @mboss.show
   	  end
+=end
   	  
   	  # check to see if all zombies are dead, and if they are, spawn a health pack
       if @dungeon.map[@player.roomy][@player.roomx].type == 4
@@ -250,6 +257,20 @@ class Game_Window < Window
   	  		# do nothing
   	  	else
   	  		# move one room to the left and update explored map
+					if @dungeon.map[@player.roomy][@player.roomx].type != @dungeon.map[@player.roomy][@player.roomx - 1].type
+						case @dungeon.map[@player.roomy][@player.roomx - 1].type
+						when 1..2
+							Song.current_song.stop
+							@explore_intro.play
+						when 3
+							Song.current_song.stop
+							@boss_intro.play
+						when 4
+							Song.current_song.stop
+							@miniboss_intro.play
+						end
+					end
+					
   	  		@player.x = 720
   	  		@player.roomx -= 1
   	  		
@@ -265,6 +286,20 @@ class Game_Window < Window
   	  		# do nothing
   	  	else
   	  		# move one room to the right and update explored map
+					if @dungeon.map[@player.roomy][@player.roomx].type != @dungeon.map[@player.roomy][@player.roomx + 1].type
+						case @dungeon.map[@player.roomy][@player.roomx + 1].type
+						when 1..2
+							Song.current_song.stop
+							@explore_intro.play
+						when 3
+							Song.current_song.stop
+							@boss_intro.play
+						when 4
+							Song.current_song.stop
+							@miniboss_intro.play
+						end
+					end
+				
   	  		@player.x = 79
   	  		@player.roomx += 1
   
@@ -280,6 +315,20 @@ class Game_Window < Window
   	  		# do nothing
   	  	else
   	  		# move one room up and update explored map
+					if @dungeon.map[@player.roomy][@player.roomx].type != @dungeon.map[@player.roomy - 1][@player.roomx].type
+						case @dungeon.map[@player.roomy - 1][@player.roomx].type
+						when 1..2
+							Song.current_song.stop
+							@explore_intro.play
+						when 3
+							Song.current_song.stop
+							@boss_intro.play
+						when 4
+							Song.current_song.stop
+							@miniboss_intro.play
+						end
+					end
+					
   	  		@player.y = 520
   	  		@player.roomy -= 1
   	  		
@@ -295,6 +344,20 @@ class Game_Window < Window
   	  		# do nothing
   	  	else
   	  		# move one room to the right and update explored map
+					if @dungeon.map[@player.roomy][@player.roomx].type != @dungeon.map[@player.roomy + 1][@player.roomx].type
+						case @dungeon.map[@player.roomy + 1][@player.roomx].type
+						when 1..2
+							Song.current_song.stop
+							@explore_intro.play
+						when 3
+							Song.current_song.stop
+							@boss_intro.play
+						when 4
+							Song.current_song.stop
+							@miniboss_intro.play
+						end
+					end
+					
   	  		@player.y = 79
   	  		@player.roomy += 1
   
@@ -331,12 +394,13 @@ class Game_Window < Window
       @background.draw(-1, -1, 0, 1, 1)
 
       @dungeon.enemies[@player.roomy][@player.roomx].each {|zombie|
-        zombie.draw(1.5, 1.5)
+      	zombie.draw(1.5, 1.5)
         #draw_rect(zombie.x - (zombie.width / 2), zombie.y - (zombie.height / 2), zombie.width, zombie.height, Color::RED, 1)
       }
-      if @dungeon.map[@player.roomy][@player.roomx].type == 4
-        @mboss.draw(2.3, 2.3)
-      end
+      
+      #if @dungeon.map[@player.roomy][@player.roomx].type == 4
+      #  @mboss.draw(2.3, 2.3)
+      #end
       
       @font.draw("Score: #{@score}", 750, 0, 0, 1, 1)
       

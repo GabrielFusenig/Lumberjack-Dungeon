@@ -142,7 +142,6 @@ class Dungeon
 		# set trooms
 		for r in trooms
 			@map[r[1]][r[0]].setType(4)
-			@enemies[r[1]][r[0]].setType(4)
 		end
 		
 		# set @spawn room
@@ -151,6 +150,23 @@ class Dungeon
 		# set @boss room
 		@map[@boss[1]][@boss[0]].setType(3)
 
+	end
+	
+	def spawnBosses(window, sprite, projectile)
+		@map.each_with_index() { |row, j|
+			row.each_with_index() { |room, i|
+				if room.type == 4
+					# spawn miniboss
+					m = Miniboss.new(window, sprite)
+					m.setBulletType(window, projectile)
+					@enemies[j][i].push(m)
+					
+				elsif room.type == 3
+					# spawn boss
+				end
+			}
+			puts
+		}
 	end
 	
 	def update(x, y)

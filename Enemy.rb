@@ -5,7 +5,7 @@ include Gosu
 
 
 class Enemy < Sprite
-  attr_accessor :x, :y, :z, :angle, :vel_x, :vel_y, :health, :max_health
+  attr_accessor :x, :y, :z, :angle, :vel_x, :vel_y, :health, :max_health, :is_boss
   
   def initialize(window, sprite)
     @image = Image.new(sprite, :retro => true)
@@ -14,6 +14,8 @@ class Enemy < Sprite
     @health = @max_health =100
     @x = rand(100..700)
     @y = rand(100..500)
+    
+    @is_boss = false
   end
   
   def warp(x,y,z)
