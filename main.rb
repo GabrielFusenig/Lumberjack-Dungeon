@@ -413,9 +413,32 @@ class Game_Window < Window
       
       @hpack.draw
       
+      # draw sidebar
+      draw_rect(596, 0, 204, 600, Color.rgba(200, 200, 200, 255))
+      
+      # hp and exp bar
+      draw_rect(608, 221, 180.0 * (1.0 * @score / 20), 18, Color.rgba(0, 200, 35, 255))
+      draw_rect(607, 220, 182, 1, Color::BLACK)
+      draw_rect(607, 239, 182, 1, Color::BLACK)
+      draw_rect(607, 220, 1, 20, Color::BLACK)
+      draw_rect(788, 220, 1, 20, Color::BLACK)
+      @font.draw("EXP", 612, 221, 0, 1, 1)
+      @font.draw("#{@score} / 20", 680, 221, 0, 1, 1)
+      
+			draw_rect(608, 246, 180.0 * (1.0 * @player.health / @player.max_health), 18, Color::RED)
+      draw_rect(607, 245, 182, 1, Color::BLACK)
+			draw_rect(607, 264, 182, 1, Color::BLACK)
+			draw_rect(607, 245, 1, 20, Color::BLACK)
+			draw_rect(788, 245, 1, 20, Color::BLACK)
+			@font.draw("HP", 612, 246, 0, 1, 1)
+      @font.draw("#{@player.health} / #{@player.max_health}", 670, 246, 0, 1, 1)
+      
+      
+      
       # draw minimap
       if @minimap
-  			draw_rect(596, 0, 204, 204, Color.rgba(50, 50, 50, 100))
+  			#draw_rect(596, 0, 204, 204, Color.rgba(50, 50, 50, 100))
+  			draw_rect(596, 0, 204, 204, Color.rgba(0, 0, 0, 255))
   	    @dungeon.explored.each_with_index { |row, i|
   	    	row.each_with_index { |room, j|
   	    		width = 200.0 / row.size
