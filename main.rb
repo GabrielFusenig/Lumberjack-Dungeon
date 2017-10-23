@@ -15,7 +15,7 @@ is_dead = false
 
 class Game_Window < Window
   def initialize
-    super 800, 600
+    super 1000, 600
     self.caption = "Lumberjack Dungeon"
     @background = Image.new("bakku guroundo.png", :retro => true)
     #@menu = Image.new("")
@@ -378,15 +378,15 @@ class Game_Window < Window
     case @game_state
     when @main_menu
       #draw the menu screen
-      @game_over.draw("Lumberjack Dungeon", 115, 50, 1, 1.3, 1.3, Color::WHITE)
+      @game_over.draw("Lumberjack Dungeon", 215, 50, 1, 1.3, 1.3, Color::WHITE)
       
-      @game_over.draw("Play", 365, 400, 1, 0.75, 0.75, Color::WHITE)
+      @game_over.draw("Play", 465, 400, 1, 0.75, 0.75, Color::WHITE)
       
-      if mouse_x >= 350 && mouse_x <= 450 && mouse_y >= 400 && mouse_y <= 460
-        draw_rect(348, 396, 4, 58, Color::WHITE, 1)
-        draw_rect(450, 396, 4, 58, Color::WHITE, 1)
-        draw_rect(350, 396, 100, 4, Color::WHITE, 1)
-        draw_rect(350, 450, 100, 4, Color::WHITE, 1)
+      if mouse_x >= 450 && mouse_x <= 550 && mouse_y >= 400 && mouse_y <= 460
+        draw_rect(448, 396, 4, 58, Color::WHITE, 1)
+        draw_rect(550, 396, 4, 58, Color::WHITE, 1)
+        draw_rect(450, 396, 100, 4, Color::WHITE, 1)
+        draw_rect(450, 450, 100, 4, Color::WHITE, 1)
       end
       
     when @game
@@ -414,53 +414,53 @@ class Game_Window < Window
       @hpack.draw
       
       # draw sidebar
-      draw_rect(596, 0, 204, 600, Color.rgba(200, 200, 200, 255))
+      draw_rect(796, 0, 204, 600, Color.rgba(200, 200, 200, 255))
       
       # hp and exp bar
-      draw_rect(608, 221, 180.0 * (1.0 * @score / 20), 18, Color.rgba(0, 200, 35, 255))
-      draw_rect(607, 220, 182, 1, Color::BLACK)
-      draw_rect(607, 239, 182, 1, Color::BLACK)
-      draw_rect(607, 220, 1, 20, Color::BLACK)
-      draw_rect(788, 220, 1, 20, Color::BLACK)
-      @font.draw("EXP", 612, 221, 0, 1, 1)
-      @font.draw("#{@score} / 20", 680, 221, 0, 1, 1)
+      draw_rect(808, 221, 180.0 * (1.0 * @score / 20), 18, Color.rgba(0, 200, 35, 255))
+      draw_rect(807, 220, 182, 1, Color::BLACK)
+      draw_rect(807, 239, 182, 1, Color::BLACK)
+      draw_rect(807, 220, 1, 20, Color::BLACK)
+      draw_rect(988, 220, 1, 20, Color::BLACK)
+      @font.draw("EXP", 812, 221, 0, 1, 1)
+      @font.draw("#{@score} / 20", 880, 221, 0, 1, 1)
       
-			draw_rect(608, 246, 180.0 * (1.0 * @player.health / @player.max_health), 18, Color::RED)
-      draw_rect(607, 245, 182, 1, Color::BLACK)
-			draw_rect(607, 264, 182, 1, Color::BLACK)
-			draw_rect(607, 245, 1, 20, Color::BLACK)
-			draw_rect(788, 245, 1, 20, Color::BLACK)
-			@font.draw("HP", 612, 246, 0, 1, 1)
-      @font.draw("#{@player.health} / #{@player.max_health}", 670, 246, 0, 1, 1)
+			draw_rect(808, 246, 180.0 * (1.0 * @player.health / @player.max_health), 18, Color::RED)
+      draw_rect(807, 245, 182, 1, Color::BLACK)
+			draw_rect(807, 264, 182, 1, Color::BLACK)
+			draw_rect(807, 245, 1, 20, Color::BLACK)
+			draw_rect(988, 245, 1, 20, Color::BLACK)
+			@font.draw("HP", 812, 246, 0, 1, 1)
+      @font.draw("#{@player.health} / #{@player.max_health}", 870, 246, 0, 1, 1)
       
       
       
       # draw minimap
       if @minimap
   			#draw_rect(596, 0, 204, 204, Color.rgba(50, 50, 50, 100))
-  			draw_rect(596, 0, 204, 204, Color.rgba(0, 0, 0, 255))
+  			draw_rect(796, 0, 204, 204, Color.rgba(0, 0, 0, 255))
   	    @dungeon.explored.each_with_index { |row, i|
   	    	row.each_with_index { |room, j|
   	    		width = 200.0 / row.size
   	    		height = 200.0 / @dungeon.explored.size
   					case room.type
   					when 1 # normal room
-  						draw_rect(600 + (j * width), 2 + (i * height), width, height, Color.rgba(206, 206, 206, 255))
+  						draw_rect(800 + (j * width), 2 + (i * height), width, height, Color.rgba(206, 206, 206, 255))
   					when 2 # @spawn room
-  						draw_rect(600 + (j * width), 2 + (i * height), width, height, Color::BLUE)
+  						draw_rect(800 + (j * width), 2 + (i * height), width, height, Color::BLUE)
   					when 3 # @boss room
-  						draw_rect(600 + (j * width), 2 + (i * height), width, height, Color::BLACK)
+  						draw_rect(800 + (j * width), 2 + (i * height), width, height, Color::BLACK)
   					when 4 # treasure room
-  						draw_rect(600 + (j * width), 2 + (i * height), width, height, Color.rgba(253, 240, 60, 255))
+  						draw_rect(800 + (j * width), 2 + (i * height), width, height, Color.rgba(253, 240, 60, 255))
   					else # empty space
   					end
   					
   					# draw outline on room that player is in
   					if i == @player.roomy and j == @player.roomx
-  						draw_rect(600 + (j * width), (i * height), width, 2, Color::GREEN, 1)
-  						draw_rect(600 + (j * width), 2 + ((i + 1) * height), width, 2, Color::GREEN, 1)
-  						draw_rect(598 + (j * width), 2 + (i * height), 2, height, Color::GREEN, 1)
-  						draw_rect(600 + ((j + 1) * width), 2 + (i * height), 2, height, Color::GREEN, 1)
+  						draw_rect(800 + (j * width), (i * height), width, 2, Color::GREEN, 1)
+  						draw_rect(800 + (j * width), 2 + ((i + 1) * height), width, 2, Color::GREEN, 1)
+  						draw_rect(798 + (j * width), 2 + (i * height), 2, height, Color::GREEN, 1)
+  						draw_rect(800 + ((j + 1) * width), 2 + (i * height), 2, height, Color::GREEN, 1)
   					end
   	    	}
   	    }
